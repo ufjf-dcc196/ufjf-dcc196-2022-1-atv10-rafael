@@ -1,5 +1,7 @@
 package br.ufjf.dcc196.rafael.agente008;
 
+import androidx.annotation.NonNull;
+
 public class Localizacao {
     private String regiao, estado, cidade, local;
     private Integer populacao;
@@ -47,4 +49,20 @@ public class Localizacao {
     public Integer getPopulacao() {return this.populacao;}
 
     public void setPopulacao(Integer populacao) {this.populacao = populacao;}
+
+    public Localizacao clone(){
+        Localizacao clone = new Localizacao();
+        clone.regiao=this.regiao;
+        clone.estado=this.estado;
+        clone.cidade=this.cidade;
+        clone.local=this.local;
+        clone.populacao=this.populacao;
+        return clone;
+    }
+
+    @Override
+    @NonNull
+    public String toString(){
+        return this.local + " de " + this.cidade + "/"+this.estado;
+    }
 }

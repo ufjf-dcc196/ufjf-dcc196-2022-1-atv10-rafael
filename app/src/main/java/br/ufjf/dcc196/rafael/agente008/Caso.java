@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Caso {
-    private Double dias;
+    private Integer dia;
+    private Integer hora;
     private Integer status;
     private Agente agente;
     private Criminoso criminoso;
@@ -14,23 +15,36 @@ public class Caso {
     public final Integer PERDIDO=2;
 
     public Caso() {
-        this.dias=0.0;
+        this.dia =0;
+        this.hora =0;
         this.status=EM_ANDAMENTO;
         this.agente=null;
-        this.criminoso=null;
+        this.criminoso=new Criminoso();
         this.locaisVisitados=new ArrayList<Localizacao>();
     }
 
-    public Double getDias() {
-        return this.dias;
+    public Integer getDia() {
+        return this.dia;
     }
 
-    public void setDias(Double dias) {
-        this.dias = dias;
+    public void setDia(Integer dia) {
+        this.dia = dia;
     }
 
-    public void incrDias(Double dias) {
-        this.dias += dias;
+    public void incrDia() {
+        this.dia++;
+    }
+
+    public Integer getHora() {
+        return this.hora;
+    }
+
+    public void setHora(Integer hora) {
+        this.hora = hora;
+    }
+
+    public void incrHora(Integer hora) {
+        this.hora += hora;
     }
 
     public Integer getStatus() {
@@ -63,5 +77,14 @@ public class Caso {
 
     public void setLocaisVisitados(List<Localizacao> locaisVisitados) {
         this.locaisVisitados = locaisVisitados;
+    }
+
+    //TODO Implementar randomização
+    public void criarCasoAutomatico(Agente agente){
+        this.agente=agente;
+        this.agente.incrDinheiro(1000.0);
+        this.criminoso.setNome("Ronaldo");
+        this.criminoso.setCrime("Roubo");
+
     }
 }
