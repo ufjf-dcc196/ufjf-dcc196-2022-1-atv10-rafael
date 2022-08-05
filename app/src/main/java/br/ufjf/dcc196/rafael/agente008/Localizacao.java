@@ -2,7 +2,7 @@ package br.ufjf.dcc196.rafael.agente008;
 
 public class Localizacao {
     private String regiao, estado, cidade, local;
-    Integer populacao;
+    private Integer populacao;
 
     public Localizacao() {
         this.regiao="";
