@@ -18,16 +18,28 @@
         app:layout_constraintTop_toBottomOf="@+id/tvLabelLocalizacaoAtualVisita" />
 
     <TextView
-        android:id="@+id/tvCustoVisita"
+        android:id="@+id/tvTempoVisita"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="1.0 h"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvLocalizacaoAtualVisita" />
+
+    <TextView
+        android:id="@+id/tvCustoVisita"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:text="R$xx,xx"
         android:textColor="#EA0303"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvLocalizacaoAtualVisita" />
+        app:layout_constraintTop_toBottomOf="@+id/tvLabelTempoVisita" />
 
     <TextView
         android:id="@+id/tvLabelLocalizacaoAtualVisita"
@@ -57,13 +69,25 @@
         android:id="@+id/tvLabelCustoVisita"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
         android:text="Custo:"
         android:textColor="#EA0303"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/tvCustoVisita"
+        app:layout_constraintTop_toBottomOf="@+id/tvLabelTempoVisita"
+        tools:layout_editor_absoluteX="286dp" />
+
+    <TextView
+        android:id="@+id/tvLabelTempoVisita"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="Tempo:"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/tvTempoVisita"
         app:layout_constraintTop_toBottomOf="@+id/tvLocalizacaoAtualVisita" />
 
     <TextView
@@ -196,9 +220,9 @@
         android:layout_width="0dp"
         android:layout_height="213dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvLabelIrVisita" />
+        app:layout_constraintTop_toBottomOf="@+id/tvLabelCustoVisita" />
 </androidx.constraintlayout.widget.ConstraintLayout>

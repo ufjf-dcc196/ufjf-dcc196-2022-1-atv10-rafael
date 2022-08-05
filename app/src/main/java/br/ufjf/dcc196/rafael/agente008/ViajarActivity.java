@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class ViajarActivity extends AppCompatActivity {
 
-    private TextView tvNomeAgenteViagem, tvDiaViagem, tvHoraViagem, tvLocalizacaoAtualViagem, tvCustoViagem;
+    private TextView tvNomeAgenteViagem, tvDiaViagem, tvHoraViagem, tvLocalizacaoAtualViagem, tvCustoViagem, tvTempoViagem;
     private Spinner spUfViagem, spMunicipioViagem;
     private Button btnViajarViagem, btnRetornarViagem;
 
@@ -27,6 +27,7 @@ public class ViajarActivity extends AppCompatActivity {
         this.tvHoraViagem=findViewById(R.id.tvHoraViagem);
         this.tvLocalizacaoAtualViagem =findViewById(R.id.tvLocalizacaoAtualViagem);
         this.tvCustoViagem=findViewById(R.id.tvCustoViagem);
+        this.tvTempoViagem=findViewById(R.id.tvTempoViagem);
 
         //Spinners
         this.spUfViagem=findViewById(R.id.spUfViagem);

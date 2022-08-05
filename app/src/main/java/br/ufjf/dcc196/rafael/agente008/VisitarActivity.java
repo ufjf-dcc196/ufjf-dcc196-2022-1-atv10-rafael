@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 public class VisitarActivity extends AppCompatActivity {
 
-    private TextView tvNomeAgenteVisita, tvDiaVisita, tvHoraVisita, tvLocalizacaoAtualVisita, tvCustoVisita;
+    private TextView tvNomeAgenteVisita, tvDiaVisita, tvHoraVisita, tvLocalizacaoAtualVisita, tvCustoVisita, tvTempoVisita;
     private Spinner spUfVisita, spMunicipioVisita;
     private Button btnVisitarVisita, btnRetornarVisita;
 
@@ -28,6 +28,7 @@ public class VisitarActivity extends AppCompatActivity {
         this.tvHoraVisita=findViewById(R.id.tvHoraVisita);
         this.tvLocalizacaoAtualVisita =findViewById(R.id.tvLocalizacaoAtualVisita);
         this.tvCustoVisita=findViewById(R.id.tvCustoVisita);
+        this.tvTempoVisita=findViewById(R.id.tvTempoVisita);
 
         //Buttons
         this.btnVisitarVisita=findViewById(R.id.btnVisitar);

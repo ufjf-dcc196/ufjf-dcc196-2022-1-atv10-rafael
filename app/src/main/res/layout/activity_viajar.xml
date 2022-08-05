@@ -6,6 +6,31 @@
     android:layout_height="match_parent"
     tools:context=".ViajarActivity">
 
+    <TextView
+        android:id="@+id/tvTempoViagem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="1.0 h"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvLocalizacaoAtualViagem" />
+
+    <TextView
+        android:id="@+id/tvLabelTempoViagem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:text="Tempo:"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/tvTempoViagem"
+        app:layout_constraintTop_toBottomOf="@+id/tvLocalizacaoAtualViagem" />
+
     <Spinner
         android:id="@+id/spUfViagem"
         android:layout_width="85dp"
@@ -13,7 +38,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvLabelIrViagem" />
+        app:layout_constraintTop_toBottomOf="@+id/tvLabelCustoViagem" />
 
     <Spinner
         android:id="@+id/spMunicipioViagem"
@@ -24,7 +49,7 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/spUfViagem"
-        app:layout_constraintTop_toBottomOf="@+id/tvLabelIrViagem" />
+        app:layout_constraintTop_toBottomOf="@+id/tvLabelCustoViagem" />
 
     <TextView
         android:id="@+id/tvLocalizacaoAtualViagem"
@@ -47,7 +72,7 @@
         android:textColor="#EA0303"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvLocalizacaoAtualViagem" />
+        app:layout_constraintTop_toBottomOf="@+id/tvTempoViagem" />
 
     <TextView
         android:id="@+id/tvLabelLocalizacaoAtualViagem"
@@ -84,7 +109,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/tvCustoViagem"
-        app:layout_constraintTop_toBottomOf="@+id/tvLocalizacaoAtualViagem" />
+        app:layout_constraintTop_toBottomOf="@+id/tvLabelTempoViagem" />
 
     <TextView
         android:id="@+id/tvLabelDiaViagem"
