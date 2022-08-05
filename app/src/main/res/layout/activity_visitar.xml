@@ -7,7 +7,7 @@
     tools:context=".VisitarActivity">
 
     <TextView
-        android:id="@+id/tvLocalizacaoVisita"
+        android:id="@+id/tvLocalizacaoAtualVisita"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -27,7 +27,7 @@
         android:textColor="#EA0303"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvLocalizacaoVisita" />
+        app:layout_constraintTop_toBottomOf="@+id/tvLocalizacaoAtualVisita" />
 
     <TextView
         android:id="@+id/tvLabelLocalizacaoAtualVisita"
@@ -51,7 +51,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/tvLabelDiaVisita"
-        app:layout_constraintTop_toBottomOf="@+id/tvLocalizacaoVisita" />
+        app:layout_constraintTop_toBottomOf="@+id/tvLocalizacaoAtualVisita" />
 
     <TextView
         android:id="@+id/tvLabelCustoVisita"
@@ -64,7 +64,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/tvCustoVisita"
-        app:layout_constraintTop_toBottomOf="@+id/tvLocalizacaoVisita" />
+        app:layout_constraintTop_toBottomOf="@+id/tvLocalizacaoAtualVisita" />
 
     <TextView
         android:id="@+id/tvLabelDiaVisita"

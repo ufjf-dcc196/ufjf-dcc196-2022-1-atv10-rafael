@@ -27,7 +27,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tvLabelIrViagem" />
 
     <TextView
-        android:id="@+id/tvLocalizacaoViagem"
+        android:id="@+id/tvLocalizacaoAtualViagem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -47,7 +47,7 @@
         android:textColor="#EA0303"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvLocalizacaoViagem" />
+        app:layout_constraintTop_toBottomOf="@+id/tvLocalizacaoAtualViagem" />
 
     <TextView
         android:id="@+id/tvLabelLocalizacaoAtualViagem"
@@ -71,7 +71,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/tvLabelDiaViagem"
-        app:layout_constraintTop_toBottomOf="@+id/tvLocalizacaoViagem" />
+        app:layout_constraintTop_toBottomOf="@+id/tvLocalizacaoAtualViagem" />
 
     <TextView
         android:id="@+id/tvLabelCustoViagem"
@@ -84,7 +84,7 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/tvCustoViagem"
-        app:layout_constraintTop_toBottomOf="@+id/tvLocalizacaoViagem" />
+        app:layout_constraintTop_toBottomOf="@+id/tvLocalizacaoAtualViagem" />
 
     <TextView
         android:id="@+id/tvLabelDiaViagem"
