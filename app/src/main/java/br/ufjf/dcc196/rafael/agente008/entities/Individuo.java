@@ -1,4 +1,4 @@
-package br.ufjf.dcc196.rafael.agente008;
+package br.ufjf.dcc196.rafael.agente008.entities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ public abstract class Individuo {
     private List<Localizacao> locaisVisitados;
 
     public Individuo(){
-        this.nome="";
+        this.nome="--";
         this.locaisVisitados=new ArrayList<Localizacao>();
     }
 

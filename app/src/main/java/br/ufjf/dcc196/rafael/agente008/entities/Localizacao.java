@@ -1,4 +1,4 @@
-package br.ufjf.dcc196.rafael.agente008;
+package br.ufjf.dcc196.rafael.agente008.entities;
 
 import androidx.annotation.NonNull;
 
@@ -7,10 +7,10 @@ public class Localizacao {
     private Integer populacao;
 
     public Localizacao() {
-        this.regiao="";
-        this.estado="";
-        this.cidade="";
-        this.local="";
+        this.regiao="--";
+        this.estado="--";
+        this.cidade="--";
+        this.local="--";
         this.populacao=0;
     }
 

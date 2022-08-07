@@ -13,6 +13,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.ufjf.dcc196.rafael.agente008.entities.Agente;
+import br.ufjf.dcc196.rafael.agente008.entities.Caso;
+import br.ufjf.dcc196.rafael.agente008.entities.Criminoso;
+import br.ufjf.dcc196.rafael.agente008.entities.Individuo;
+import br.ufjf.dcc196.rafael.agente008.entities.Localizacao;
+
 public class JogoRepository {
     private Context contexto;
     private SharedPreferences preferences;
@@ -21,12 +27,12 @@ public class JogoRepository {
     private final String AGENTE_KEY = "A";
     private final String CRIMINOSO_KEY = "CR";
 
-    public JogoRepository(Context context){
+    public JogoRepository(@NonNull Context context){
         this.contexto=context;
         this.preferences= context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
     }
 
-    public void setCaso(Caso caso){
+    public void setCaso(@NonNull Caso caso){
 
         try {
             JSONObject jsonObj = new JSONObject();
@@ -52,7 +58,8 @@ public class JogoRepository {
         try {
 
             Caso caso=new Caso();
-            JSONObject jsonObj = new JSONObject(this.preferences.getString(AGENTE_KEY,"{}"));
+            //TODO erro aqui, verificar
+            JSONObject jsonObj = new JSONObject(this.preferences.getString(CASO_KEY,"{}"));
 
             caso.setDia(jsonObj.getInt("dia"));
             caso.setHora(jsonObj.getInt("hora"));
@@ -78,6 +85,7 @@ public class JogoRepository {
             jsonObj.put("nomeAgente",agente.getNome());
             jsonObj.put("dinheiro", agente.getDinheiro());
             jsonObj.put("casosConcluidos", agente.getCasosConcluidos());
+            jsonObj.put("existe", agente.existe());
 
             //base
             jsonObj.put("baseCidade", agente.getBase().getCidade());
@@ -112,8 +120,15 @@ public class JogoRepository {
             agente.setNome(jsonObj.getString("nomeAgente"));
             agente.setDinheiro(jsonObj.getDouble("dinheiro"));
             agente.setCasosConcluidos(jsonObj.getInt("casosConcluidos"));
+            agente.setExiste(jsonObj.getBoolean("existe"));
 
-            jsonArray.put(jsonObj);
+            //base
+            agente.getBase().setCidade(jsonObj.getString("baseCidade"));
+            agente.getBase().setEstado(jsonObj.getString("baseEstado"));
+            agente.getBase().setRegiao(jsonObj.getString("baseRegiao"));
+            agente.getBase().setPopulacao(jsonObj.getInt("basePopulacao"));
+            agente.getBase().setLocal(jsonObj.getString("baseLocal"));
+
 
             agente.setLocaisVisitados(getLocalizacoes(agente, jsonArray));
 
@@ -190,7 +205,7 @@ public class JogoRepository {
             String arrayStr=jsonArray.toString();
 
             SharedPreferences.Editor editor = this.preferences.edit();
-            editor.putString(AGENTE_KEY ,arrayStr);
+            editor.putString(CRIMINOSO_KEY ,arrayStr);
             editor.apply();
 
         }catch (JSONException e){
@@ -208,8 +223,6 @@ public class JogoRepository {
 
             criminoso.setNome(jsonObj.getString("nomeCriminoso"));
             criminoso.setCrime(jsonObj.getString("crime"));
-
-            jsonArray.put(jsonObj);
 
             criminoso.setLocaisVisitados(getLocalizacoes(criminoso, jsonArray));
 

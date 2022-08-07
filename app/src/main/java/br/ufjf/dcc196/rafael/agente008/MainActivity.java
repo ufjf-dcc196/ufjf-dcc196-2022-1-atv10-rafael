@@ -16,19 +16,19 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import br.ufjf.dcc196.rafael.agente008.entities.*;
+
 @SuppressLint({"SetTextI18n", "NonConstantResourceId"})
 public class MainActivity extends AppCompatActivity {
 
     private TextView tvNomeAgente, tvDia, tvHora, tvDinheiro, tvNomeCriminoso, tvCrime, tvStatus, tvLocalizacaoAtual;
     private Button btnNovoJogo, btnVisitarLocal, btnFazerViagem, btnNovoCaso;
     private RecyclerView rvLocaisVisitados;
+    private JogoRepository repo;
     private ActivityResultLauncher<Intent> launcher;
     public final int RESULT_NOVO_JOGO = 0;
     public final int RESULT_VISITAR = 1;
     public final int RESULT_VIAJAR = 2;
-    //TODO remover, colocado aqui só pra testar
-    private Agente agente;
-    private Caso caso;
 
 
 
@@ -37,10 +37,38 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        this.repo=new JogoRepository(getApplicationContext());
+
+        resetData();
+
         buildViews();
         buildLauncher();
+        loadData();
     }
 
+    private void loadData(){
+        Caso caso=this.repo.getCaso();
+        Agente agente = caso.getAgente();
+
+        if(agente.existe()) {
+
+
+            this.tvNomeAgente.setText(agente.getNome().toString());
+            this.tvDinheiro.setText("R$" + caso.getAgente().getDinheiro().toString());
+
+            if (!caso.getStatus().equals(Caso.INEXISTENTE)) {
+                this.tvDia.setText(caso.getDia().toString());
+                this.tvHora.setText(caso.getHora().toString());
+                this.tvStatus.setText(caso.getStatus().toString());
+                this.tvNomeCriminoso.setText(caso.getCriminoso().getNome().toString());
+                this.tvCrime.setText(caso.getCriminoso().getCrime().toString());
+                this.tvLocalizacaoAtual.setText(agente.getLocaisVisitados().get(agente.getLocaisVisitados().size() - 1).toString());
+            }
+        }
+    }
+    private void resetData(){
+        this.repo.setCaso(new Caso());
+    }
     private void buildViews(){
         //TextViews
         this.tvDia=findViewById(R.id.tvDia);
@@ -71,16 +99,13 @@ public class MainActivity extends AppCompatActivity {
 
                 if(result.getResultCode()==RESULT_NOVO_JOGO){
                     criarAgente(extras);
-                    criarCaso();
-                    montarLabels();
+                    loadData();
                 } else if(result.getResultCode()==RESULT_VISITAR){
                     criarAgente(extras);
-                    criarCaso();
-                    montarLabels();
+                    loadData();
                 } else if(result.getResultCode()==RESULT_VIAJAR){
                     criarAgente(extras);
-                    criarCaso();
-                    montarLabels();
+                    loadData();
                 }
 
 
@@ -90,33 +115,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void montarLabels(){
-        this.tvNomeAgente.setText(this.agente.getNome());
-        this.tvDia.setText(this.caso.getDia().toString());
-        this.tvHora.setText(this.caso.getHora().toString());
-        this.tvDinheiro.setText("R$"+this.caso.getAgente().getDinheiro().toString());
-        this.tvStatus.setText(this.caso.getStatus().toString());
-        this.tvNomeCriminoso.setText(this.caso.getCriminoso().getNome().toString());
-        this.tvCrime.setText(this.caso.getCriminoso().getCrime().toString());
-       this.tvLocalizacaoAtual.setText(agente.getLocaisVisitados().get(agente.getLocaisVisitados().size()-1).toString());
-    }
-
     private void criarAgente(Bundle extras){
-        agente = new Agente();
+
+        Agente agente = new Agente();
         agente.setNome(extras.getString("nomeAgente"));
         agente.getBase().setCidade(extras.getString("cidadeAgente"));
         agente.getBase().setEstado(extras.getString("ufAgente"));
         agente.getBase().setLocal("Delegacia");
+        agente.setExiste(true);
         agente.setLocaisVisitados(new ArrayList<Localizacao>(){{add(agente.getBase().clone());}});
+
+        Caso caso = new Caso();
+        caso.criarCasoAutomatico(agente); //TODO apagar, só pra testar
+        //caso.setAgente(agente);
+
+        this.repo.setCaso(caso);
+        loadData();
 
         this.btnVisitarLocal.setEnabled(true);
         this.btnFazerViagem.setEnabled(true);
     }
-    private void criarCaso(){
-        this.caso = new Caso();
-        this.caso.criarCasoAutomatico(this.agente);
-    }
-
 
     public void clickBotoes(View v){
         try {
@@ -139,6 +157,10 @@ public class MainActivity extends AppCompatActivity {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    private void sendExtras(Intent intent){
+
     }
 
 }

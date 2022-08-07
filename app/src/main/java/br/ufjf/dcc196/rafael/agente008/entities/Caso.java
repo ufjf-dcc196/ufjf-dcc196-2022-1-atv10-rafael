@@ -1,7 +1,4 @@
-package br.ufjf.dcc196.rafael.agente008;
-
-import java.util.ArrayList;
-import java.util.List;
+package br.ufjf.dcc196.rafael.agente008.entities;
 
 public class Caso {
     private Integer dia;
@@ -9,15 +6,16 @@ public class Caso {
     private Integer status;
     private Agente agente;
     private Criminoso criminoso;
-    public final Integer EM_ANDAMENTO=0;
-    public final Integer CONCLUIDO=1;
-    public final Integer PERDIDO=2;
+    public static final Integer INEXISTENTE=0;
+    public static final Integer EM_ANDAMENTO=1;
+    public static final Integer CONCLUIDO=2;
+    public static final Integer PERDIDO=3;
 
     public Caso() {
         this.dia =0;
         this.hora =0;
-        this.status=EM_ANDAMENTO;
-        this.agente=null;
+        this.status=INEXISTENTE;
+        this.agente=new Agente();
         this.criminoso=new Criminoso();
     }
 
@@ -75,6 +73,7 @@ public class Caso {
         this.agente.incrDinheiro(1000.0);
         this.criminoso.setNome("Ronaldo");
         this.criminoso.setCrime("Roubo");
+        this.status=EM_ANDAMENTO;
 
     }
 }
