@@ -14,6 +14,7 @@ public class NovoJogoActivity extends AppCompatActivity {
     private EditText etNome;
     private Spinner spUf, spMunicipio;
     private Button btnCadastrar, btnRetornar;
+    public final int RESULT_NOVO_JOGO = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +40,10 @@ public class NovoJogoActivity extends AppCompatActivity {
     public void cadastrarClick(View v){
         if(!this.etNome.getText().toString().equals("")) {
             Intent resultado = new Intent();
-            resultado.putExtra("nome", this.etNome.getText().toString());
-            resultado.putExtra("cidade", "Juiz de Fora");
-            resultado.putExtra("estado", "MG");
-            setResult(0, resultado);
+            resultado.putExtra("nomeAgente", this.etNome.getText().toString());
+            resultado.putExtra("cidadeAgente", "Juiz de Fora");
+            resultado.putExtra("ufAgente", "MG");
+            setResult(RESULT_NOVO_JOGO, resultado);
             finish();
         }
 
@@ -50,7 +51,7 @@ public class NovoJogoActivity extends AppCompatActivity {
 
     public void retornarClick(View v){
             Intent resultado = new Intent();
-            setResult(1, resultado);
+            setResult(-1, resultado);
             finish();
 
     }

@@ -1,25 +1,16 @@
 package br.ufjf.dcc196.rafael.agente008;
 
-public class Agente {
-    private String nome;
+public class Agente extends Individuo {
+
     private Double dinheiro;
     private Integer casosConcluidos;
-    private Localizacao localizacao, base;
+    private Localizacao base;
 
     public Agente() {
-        this.nome="";
+        super();
         this.dinheiro=0.0;
         this.casosConcluidos=0;
-        this.localizacao=new Localizacao();
         this.base=new Localizacao();
-    }
-
-    public String getNome() {
-        return this.nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
     }
 
     public Double getDinheiro() {
@@ -48,14 +39,6 @@ public class Agente {
 
     public void incrCasosConcluidos() {
         this.casosConcluidos++;
-    }
-
-    public Localizacao getLocalizacao() {
-        return this.localizacao;
-    }
-
-    public void setLocalizacao(Localizacao localizacao) {
-        this.localizacao = localizacao;
     }
 
     public Localizacao getBase() {

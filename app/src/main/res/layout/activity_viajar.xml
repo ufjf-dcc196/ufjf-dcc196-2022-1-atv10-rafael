@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="1.0 h"
         android:textColor="#000000"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -56,7 +55,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Local tal na cidade tal/UF"
         android:textColor="#000000"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/tvLabelLocalizacaoAtualViagem"
@@ -68,7 +66,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="R$xx,xx"
         android:textColor="#EA0303"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -129,7 +126,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="xx"
         android:textColor="#000000"
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/tvLabelDiaViagem"
@@ -154,7 +150,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="xx:xx"
         android:textColor="#000000"
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/tvLabelHoraViagem"
@@ -166,7 +161,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="R$xx,xx"
         android:textColor="#4CAF50"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -178,7 +172,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Nome do Agente"
         android:textColor="#000000"
         android:textSize="16sp"
         android:textStyle="italic"
@@ -198,7 +191,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btnViajar"
+        android:id="@+id/btnFazerViagem"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -217,9 +210,10 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
+        android:onClick="retornarClick"
         android:text="Retornar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnViajar" />
+        app:layout_constraintTop_toBottomOf="@+id/btnFazerViagem" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

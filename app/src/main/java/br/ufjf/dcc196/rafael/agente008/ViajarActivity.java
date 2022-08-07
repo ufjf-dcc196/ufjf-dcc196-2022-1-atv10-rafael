@@ -1,6 +1,8 @@
 package br.ufjf.dcc196.rafael.agente008;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -12,6 +14,7 @@ public class ViajarActivity extends AppCompatActivity {
     private TextView tvNomeAgenteViagem, tvDiaViagem, tvHoraViagem, tvLocalizacaoAtualViagem, tvCustoViagem, tvTempoViagem;
     private Spinner spUfViagem, spMunicipioViagem;
     private Button btnViajarViagem, btnRetornarViagem;
+    public final int RESULT_VIAJAR = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +37,14 @@ public class ViajarActivity extends AppCompatActivity {
         this.spMunicipioViagem=findViewById(R.id.spMunicipioViagem);
 
         //Buttons
-        this.btnViajarViagem=findViewById(R.id.btnViajar);
+        this.btnViajarViagem=findViewById(R.id.btnFazerViagem);
         this.btnRetornarViagem=findViewById(R.id.btnRetornaViagem);
+    }
+
+    public void retornarClick(View v){
+        Intent resultado = new Intent();
+        setResult(-1, resultado);
+        finish();
+
     }
 }

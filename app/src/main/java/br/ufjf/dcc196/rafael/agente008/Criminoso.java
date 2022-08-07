@@ -2,22 +2,13 @@ package br.ufjf.dcc196.rafael.agente008;
 
 import java.util.List;
 
-public class Criminoso {
-    private String nome, crime;
+public class Criminoso extends Individuo {
+    private String crime;
     private List<Localizacao> locaisVisitados;
 
     public Criminoso() {
-        this.nome="";
+        super();
         this.crime="";
-        this.locaisVisitados=null;
-    }
-
-    public String getNome() {
-        return this.nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
     }
 
     public String getCrime() {
@@ -28,11 +19,4 @@ public class Criminoso {
         this.crime = crime;
     }
 
-    public List<Localizacao> getLocaisVisitados() {
-        return this.locaisVisitados;
-    }
-
-    public void setLocaisVisitados(List<Localizacao> locaisVisitados) {
-        this.locaisVisitados = locaisVisitados;
-    }
 }

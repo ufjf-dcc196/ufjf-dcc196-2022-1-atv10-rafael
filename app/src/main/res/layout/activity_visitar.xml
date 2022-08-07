@@ -23,7 +23,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="1.0 h"
         android:textColor="#000000"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -35,7 +34,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:text="R$xx,xx"
         android:textColor="#EA0303"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -70,12 +68,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:text="Custo:"
         android:textColor="#EA0303"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/tvLabelTempoVisita"
-        tools:layout_editor_absoluteX="286dp" />
+        app:layout_constraintEnd_toStartOf="@+id/tvCustoVisita"
+        app:layout_constraintTop_toBottomOf="@+id/tvLabelTempoVisita" />
 
     <TextView
         android:id="@+id/tvLabelTempoVisita"
@@ -83,7 +82,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
-        android:text="Tempo:"
+        android:text="Tempo necerrário:"
         android:textColor="#000000"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -195,6 +194,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
+        android:onClick="retornarClick"
         android:text="Retornar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

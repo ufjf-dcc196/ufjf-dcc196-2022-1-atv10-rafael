@@ -9,7 +9,6 @@ public class Caso {
     private Integer status;
     private Agente agente;
     private Criminoso criminoso;
-    private List<Localizacao> locaisVisitados;
     public final Integer EM_ANDAMENTO=0;
     public final Integer CONCLUIDO=1;
     public final Integer PERDIDO=2;
@@ -20,7 +19,6 @@ public class Caso {
         this.status=EM_ANDAMENTO;
         this.agente=null;
         this.criminoso=new Criminoso();
-        this.locaisVisitados=new ArrayList<Localizacao>();
     }
 
     public Integer getDia() {
@@ -69,14 +67,6 @@ public class Caso {
 
     public void setCriminoso(Criminoso criminoso) {
         this.criminoso = criminoso;
-    }
-
-    public List<Localizacao> getLocaisVisitados() {
-        return this.locaisVisitados;
-    }
-
-    public void setLocaisVisitados(List<Localizacao> locaisVisitados) {
-        this.locaisVisitados = locaisVisitados;
     }
 
     //TODO Implementar randomização

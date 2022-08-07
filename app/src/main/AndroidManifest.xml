@@ -17,6 +17,9 @@
             android:name=".VisitarActivity"
             android:exported="false" />
         <activity
+            android:name=".ViajarActivity"
+            android:exported="false" />
+        <activity
             android:name=".NovoJogoActivity"
             android:exported="false" />
         <activity
