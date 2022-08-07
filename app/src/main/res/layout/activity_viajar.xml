@@ -30,26 +30,6 @@
         app:layout_constraintEnd_toStartOf="@+id/tvTempoViagem"
         app:layout_constraintTop_toBottomOf="@+id/tvLocalizacaoAtualViagem" />
 
-    <Spinner
-        android:id="@+id/spUfViagem"
-        android:layout_width="85dp"
-        android:layout_height="31dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvLabelCustoViagem" />
-
-    <Spinner
-        android:id="@+id/spMunicipioViagem"
-        android:layout_width="0dp"
-        android:layout_height="31dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/spUfViagem"
-        app:layout_constraintTop_toBottomOf="@+id/tvLabelCustoViagem" />
-
     <TextView
         android:id="@+id/tvLocalizacaoAtualViagem"
         android:layout_width="wrap_content"
@@ -200,20 +180,58 @@
         android:enabled="false"
         android:text="Viajar"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spMunicipioViagem" />
+        app:layout_constraintTop_toBottomOf="@+id/rvCidadesViajar" />
 
     <Button
         android:id="@+id/btnRetornaViagem"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="16dp"
         android:onClick="retornarClick"
         android:text="Retornar"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnFazerViagem" />
+
+    <EditText
+        android:id="@+id/etUfViajar"
+        android:layout_width="78dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="UF"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="@+id/tvLabelIrViagem"
+        app:layout_constraintTop_toBottomOf="@+id/tvLabelCustoViagem" />
+
+    <EditText
+        android:id="@+id/etCidadeViajar"
+        android:layout_width="0dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:hint="Cidade"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/etUfViajar"
+        app:layout_constraintTop_toBottomOf="@+id/tvLabelCustoViagem" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvCidadesViajar"
+        android:layout_width="0dp"
+        android:layout_height="244dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etCidadeViajar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

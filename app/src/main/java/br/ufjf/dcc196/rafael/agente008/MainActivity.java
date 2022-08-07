@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
         this.repo=new JogoRepository(getApplicationContext());
 
-        resetData();
+        //resetData();
 
         buildViews();
         buildLauncher();

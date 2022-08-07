@@ -1,6 +1,7 @@
 package br.ufjf.dcc196.rafael.agente008;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,9 +12,9 @@ import android.widget.Spinner;
 
 public class NovoJogoActivity extends AppCompatActivity {
 
-    private EditText etNome;
-    private Spinner spUf, spMunicipio;
+    private EditText etNome, etUf, etCidade;
     private Button btnCadastrar, btnRetornar;
+    private RecyclerView rvCidades;
     public final int RESULT_NOVO_JOGO = 0;
 
     @Override
@@ -27,14 +28,15 @@ public class NovoJogoActivity extends AppCompatActivity {
     private void buildViews(){
         //TextViews
         this.etNome=findViewById(R.id.etNome);
-
-        //Spinners
-        this.spUf=findViewById(R.id.spUf);
-        this.spMunicipio=findViewById(R.id.spMunicipio);
+        this.etUf=findViewById(R.id.etUfBase);
+        this.etCidade=findViewById(R.id.etCidadeBase);
 
         //Buttons
         this.btnCadastrar=findViewById(R.id.btnCadastrar);
         this.btnRetornar=findViewById(R.id.btnRetornar);
+
+        //RecyclerView
+        this.rvCidades=findViewById(R.id.rvCidadesBase);
     }
 
     public void cadastrarClick(View v){

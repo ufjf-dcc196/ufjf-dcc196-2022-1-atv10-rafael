@@ -4,22 +4,24 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Spinner;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class ViajarActivity extends AppCompatActivity {
 
     private TextView tvNomeAgenteViagem, tvDiaViagem, tvHoraViagem, tvLocalizacaoAtualViagem, tvCustoViagem, tvTempoViagem;
-    private Spinner spUfViagem, spMunicipioViagem;
+    private EditText etUf, etCidade;
     private Button btnViajarViagem, btnRetornarViagem;
+    private RecyclerView rvCidadesViajar;
     public final int RESULT_VIAJAR = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_visitar);
+        setContentView(R.layout.activity_viajar);
         buildViews();
     }
 
@@ -31,14 +33,15 @@ public class ViajarActivity extends AppCompatActivity {
         this.tvLocalizacaoAtualViagem =findViewById(R.id.tvLocalizacaoAtualViagem);
         this.tvCustoViagem=findViewById(R.id.tvCustoViagem);
         this.tvTempoViagem=findViewById(R.id.tvTempoViagem);
-
-        //Spinners
-        this.spUfViagem=findViewById(R.id.spUfViagem);
-        this.spMunicipioViagem=findViewById(R.id.spMunicipioViagem);
+        this.etUf=findViewById(R.id.etUfViajar);
+        this.etCidade=findViewById(R.id.etCidadeViajar);
 
         //Buttons
         this.btnViajarViagem=findViewById(R.id.btnFazerViagem);
         this.btnRetornarViagem=findViewById(R.id.btnRetornaViagem);
+
+        //RecyclerView
+        this.rvCidadesViajar=findViewById(R.id.rvCidadesViajar);
     }
 
     public void retornarClick(View v){
