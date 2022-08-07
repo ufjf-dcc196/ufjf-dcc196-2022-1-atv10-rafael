@@ -1,13 +1,15 @@
 package br.ufjf.dcc196.rafael.agente008;
 
+import java.util.List;
+
 public class Criminoso {
     private String nome, crime;
-    private Localizacao localizacao;
+    private List<Localizacao> locaisVisitados;
 
     public Criminoso() {
         this.nome="";
         this.crime="";
-        this.localizacao=new Localizacao();
+        this.locaisVisitados=null;
     }
 
     public String getNome() {
@@ -26,11 +28,11 @@ public class Criminoso {
         this.crime = crime;
     }
 
-    public Localizacao getLocalizacao() {
-        return this.localizacao;
+    public List<Localizacao> getLocaisVisitados() {
+        return this.locaisVisitados;
     }
 
-    public void setLocalizacao(Localizacao localizacao) {
-        this.localizacao = localizacao;
+    public void setLocaisVisitados(List<Localizacao> locaisVisitados) {
+        this.locaisVisitados = locaisVisitados;
     }
 }
