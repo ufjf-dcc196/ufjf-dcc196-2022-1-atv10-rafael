@@ -14,7 +14,7 @@ public class VisitarActivity extends AppCompatActivity {
     private TextView tvNomeAgenteVisita, tvDiaVisita, tvHoraVisita, tvLocalizacaoAtualVisita, tvCustoVisita, tvTempoVisita;
     private Spinner spUfVisita, spMunicipioVisita;
     private Button btnVisitarVisita, btnRetornarVisita;
-    public final int RESULT_VISITAR = 1;
+    public static final int RESULT_VISITAR = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

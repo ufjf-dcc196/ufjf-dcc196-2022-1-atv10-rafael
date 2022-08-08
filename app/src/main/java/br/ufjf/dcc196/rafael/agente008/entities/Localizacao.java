@@ -1,9 +1,24 @@
 package br.ufjf.dcc196.rafael.agente008.entities;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
+@Entity(tableName = "localizacao")
 public class Localizacao {
-    private String regiao, estado, cidade, local;
+
+    @PrimaryKey(autoGenerate = true)
+    private long id;
+    @ColumnInfo(name="regiao")
+    private String regiao;
+    @ColumnInfo(name="estado")
+    private String estado;
+    @ColumnInfo(name="cidades")
+    private String cidade;
+    @ColumnInfo(name="local")
+    private String local;
+    @ColumnInfo(name="populacao")
     private Integer populacao;
 
     public Localizacao() {

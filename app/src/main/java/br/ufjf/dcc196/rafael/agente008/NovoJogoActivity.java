@@ -15,7 +15,7 @@ public class NovoJogoActivity extends AppCompatActivity {
     private EditText etNome, etUf, etCidade;
     private Button btnCadastrar, btnRetornar;
     private RecyclerView rvCidades;
-    public final int RESULT_NOVO_JOGO = 0;
+    public static final int RESULT_NOVO_JOGO = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -16,7 +16,7 @@ public class ViajarActivity extends AppCompatActivity {
     private EditText etUf, etCidade;
     private Button btnViajarViagem, btnRetornarViagem;
     private RecyclerView rvCidadesViajar;
-    public final int RESULT_VIAJAR = 2;
+    public static final int RESULT_VIAJAR = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

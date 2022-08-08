@@ -26,9 +26,6 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView rvLocaisVisitados;
     private JogoRepository repo;
     private ActivityResultLauncher<Intent> launcher;
-    public final int RESULT_NOVO_JOGO = 0;
-    public final int RESULT_VISITAR = 1;
-    public final int RESULT_VIAJAR = 2;
 
 
 
@@ -97,15 +94,13 @@ public class MainActivity extends AppCompatActivity {
                 assert result.getData() != null;
                 Bundle extras = result.getData().getExtras();
 
-                if(result.getResultCode()==RESULT_NOVO_JOGO){
+                if(result.getResultCode()==NovoJogoActivity.RESULT_NOVO_JOGO){
                     criarAgente(extras);
                     loadData();
-                } else if(result.getResultCode()==RESULT_VISITAR){
-                    criarAgente(extras);
-                    loadData();
-                } else if(result.getResultCode()==RESULT_VIAJAR){
-                    criarAgente(extras);
-                    loadData();
+                } else if(result.getResultCode()==VisitarActivity.RESULT_VISITAR){
+                    //TODO implementar
+                } else if(result.getResultCode()==ViajarActivity.RESULT_VIAJAR){
+                    //TODO implementar
                 }
 
 
