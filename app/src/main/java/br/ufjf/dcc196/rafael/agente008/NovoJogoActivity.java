@@ -4,12 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import java.util.List;
 
@@ -18,7 +19,8 @@ import br.ufjf.dcc196.rafael.agente008.entities.Localizacao;
 
 public class NovoJogoActivity extends AppCompatActivity {
 
-    private EditText etNome, etUf, etCidade;
+    private EditText etNome, etCidade;
+    private Spinner spUf;
     private Button btnCadastrar, btnRetornar;
     private RecyclerView rvCidades;
     private LocalizacaoAdapter localizacaoAdapter;
@@ -34,19 +36,9 @@ public class NovoJogoActivity extends AppCompatActivity {
         this.db=AppDatabase.getInstance(getApplicationContext());
 
         buildViews();
+        buildRv();
+        buildListeners();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                localizacoes = db.localizacaoDAO().findDistinctCidades();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        buildRv();
-                    }
-                });
-            }
-        }).start();
 
 
     }
@@ -55,14 +47,34 @@ public class NovoJogoActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager=new LinearLayoutManager(this);
         this.rvCidades.setLayoutManager(layoutManager);
 
-        this.localizacaoAdapter=new LocalizacaoAdapter(this.localizacoes);
-        this.rvCidades.setAdapter(this.localizacaoAdapter);
+        LocalizacaoAdapter.OnLocalizacaoClickListener listener=new LocalizacaoAdapter.OnLocalizacaoClickListener() {
+            @Override
+            public void onLocalizacaoClick(View source, int position) {
+                System.out.println("teste");
+            }
+        };
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                localizacoes = db.localizacaoDAO().findDistinctCidades();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        localizacaoAdapter=new LocalizacaoAdapter(localizacoes,listener);
+                        rvCidades.setAdapter(localizacaoAdapter);
+                    }
+                });
+            }
+        }).start();
+
+
     }
 
     private void buildViews(){
         //TextViews
         this.etNome=findViewById(R.id.etNome);
-        this.etUf=findViewById(R.id.etUfBase);
+        this.spUf=findViewById(R.id.spUfBase);
         this.etCidade=findViewById(R.id.etCidadeBase);
 
         //Buttons
@@ -71,6 +83,23 @@ public class NovoJogoActivity extends AppCompatActivity {
 
         //RecyclerView
         this.rvCidades=findViewById(R.id.rvCidadesBase);
+    }
+
+    private void buildListeners(){
+        this.spUf.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //TODO implementar listener do Spinner
+                String str=spUf.getSelectedItem().toString();
+                String s2tr=spUf.getSelectedItem().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
     }
 
     public void cadastrarClick(View v){

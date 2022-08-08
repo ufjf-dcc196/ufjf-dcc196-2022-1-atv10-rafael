@@ -18,9 +18,15 @@ import br.ufjf.dcc196.rafael.agente008.entities.Localizacao;
 public class LocalizacaoAdapter extends RecyclerView.Adapter<LocalizacaoAdapter.CidadeViewHolder> {
 
     private List<Localizacao> localizacoes;
+    private OnLocalizacaoClickListener listener;
 
-    public LocalizacaoAdapter(List<Localizacao> localizacoes){
+    public interface OnLocalizacaoClickListener{
+        void onLocalizacaoClick(View source, int position);
+    }
+
+    public LocalizacaoAdapter(List<Localizacao> localizacoes, OnLocalizacaoClickListener listener){
         this.localizacoes=localizacoes;
+        this.listener=listener;
     }
 
     @NonNull
@@ -53,6 +59,13 @@ public class LocalizacaoAdapter extends RecyclerView.Adapter<LocalizacaoAdapter.
             super(itemView);
             this.tvUfLayout=itemView.findViewById(R.id.tvUfLayout);
             this.tvCidadeLayout=itemView.findViewById(R.id.tvCidadeLayout);
+            itemView.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View v) {
+                    listener.onLocalizacaoClick(v,getAdapterPosition());
+                }
+            });
         }
     }
 }

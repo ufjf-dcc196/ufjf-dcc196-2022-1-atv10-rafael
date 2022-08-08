@@ -83,14 +83,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnCadastrar" />
 
-    <EditText
-        android:id="@+id/etUfBase"
-        android:layout_width="73dp"
+    <Spinner
+        android:id="@+id/spUfBase"
+        android:layout_width="85dp"
         android:layout_height="41dp"
         android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="UF"
-        android:inputType="textPersonName"
+        android:entries="@array/UFs"
         app:layout_constraintStart_toStartOf="@+id/tvLabelBase"
         app:layout_constraintTop_toBottomOf="@+id/tvLabelBase" />
 
@@ -102,10 +100,10 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
-        android:hint="UF"
+        android:hint="Cidade"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/etUfBase"
+        app:layout_constraintStart_toEndOf="@+id/spUfBase"
         app:layout_constraintTop_toBottomOf="@+id/tvLabelBase" />
 
     <androidx.recyclerview.widget.RecyclerView

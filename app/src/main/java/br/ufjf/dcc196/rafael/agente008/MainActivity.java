@@ -36,9 +36,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //getApplicationContext().deleteDatabase("jogo-db");
-        //this.db=AppDatabase.getInstance(getApplicationContext());
-        //DatabaseBuilder.popularDatabase(this.db);
 
         this.repo=new JogoRepository(getApplicationContext());
 
