@@ -8,8 +8,8 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "localizacao")
 public class Localizacao {
 
-    @PrimaryKey(autoGenerate = true)
-    private long id;
+    @PrimaryKey
+    private Integer id;
     @ColumnInfo(name="regiao")
     private String regiao;
     @ColumnInfo(name="estado")
@@ -66,9 +66,9 @@ public class Localizacao {
 
     public void setPopulacao(Integer populacao) {this.populacao = populacao;}
 
-    public long getId() {return id;}
+    public Integer getId() {return id;}
 
-    public void setId(long id) {this.id = id;}
+    public void setId(Integer id) {this.id = id;}
 
     public Localizacao clone(){
         Localizacao clone = new Localizacao();

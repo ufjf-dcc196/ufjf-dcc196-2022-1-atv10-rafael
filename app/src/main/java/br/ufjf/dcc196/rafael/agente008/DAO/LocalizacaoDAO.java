@@ -31,6 +31,11 @@ public interface LocalizacaoDAO {
     @Query("DELETE from localizacao")
     void deleteAll();
 
-    @Query("Select count(*) from localizacao")
+    @Query("SELECT count(*) from localizacao")
     Integer countAll();
+
+    @Query("SELECT DISTINCT cidades, estado FROM localizacao ORDER BY cidades")
+    List<Localizacao> findDistinctCidades();
+
+
 }

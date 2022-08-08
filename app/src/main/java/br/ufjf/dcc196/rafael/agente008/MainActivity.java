@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import br.ufjf.dcc196.rafael.agente008.DAO.DatabaseBuilder;
 import br.ufjf.dcc196.rafael.agente008.entities.*;
@@ -28,24 +29,24 @@ public class MainActivity extends AppCompatActivity {
     private JogoRepository repo;
     private AppDatabase db;
     private ActivityResultLauncher<Intent> launcher;
-
+    private List<Localizacao> localizacoes;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //getApplicationContext().deleteDatabase("jogo-db");
+        //this.db=AppDatabase.getInstance(getApplicationContext());
+        //DatabaseBuilder.popularDatabase(this.db);
 
-        this.db=AppDatabase.getInstance(getApplicationContext());
-        DatabaseBuilder.popularDatabase(this.db);
-
-        /*this.repo=new JogoRepository(getApplicationContext());
+        this.repo=new JogoRepository(getApplicationContext());
 
         resetData();
 
         buildViews();
         buildLauncher();
-        loadData();*/
+        loadData();
     }
 
     private void loadData(){

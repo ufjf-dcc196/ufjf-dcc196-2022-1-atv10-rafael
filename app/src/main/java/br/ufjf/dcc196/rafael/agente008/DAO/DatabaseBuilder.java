@@ -87,11 +87,12 @@ public abstract class DatabaseBuilder {
 
                 List<Localizacao> localizacoes=buildLocalizacoes();
 
-                for(Localizacao l: localizacoes){
-                    db.localizacaoDAO().insertLocalizacao(l);
+                for(int i=0;i<localizacoes.size();i++){
+                    localizacoes.get(i).setId(i);
+                    db.localizacaoDAO().insertLocalizacao(localizacoes.get(i));
                 }
 
-                List<Localizacao> localizacoesTeste = db.localizacaoDAO().findAll();
+                System.out.println("DB populado");
             }
         }).start();
 
