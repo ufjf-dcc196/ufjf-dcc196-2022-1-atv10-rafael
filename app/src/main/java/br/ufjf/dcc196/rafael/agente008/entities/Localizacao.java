@@ -65,6 +65,10 @@ public class Localizacao {
 
     public void setPopulacao(Integer populacao) {this.populacao = populacao;}
 
+    public long getId() {return id;}
+
+    public void setId(long id) {this.id = id;}
+
     public Localizacao clone(){
         Localizacao clone = new Localizacao();
         clone.regiao=this.regiao;

@@ -11,7 +11,7 @@ import java.util.List;
 import br.ufjf.dcc196.rafael.agente008.entities.Localizacao;
 
 @Dao
-public class LocalizacaoDAO {
+public interface LocalizacaoDAO {
 
     @Insert
     void insertLocalizacao(Localizacao localizacao);

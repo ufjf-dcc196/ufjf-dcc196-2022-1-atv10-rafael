@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 import br.ufjf.dcc196.rafael.agente008.DAO.LocalizacaoDAO;
 import br.ufjf.dcc196.rafael.agente008.entities.Localizacao;
 
-@Database(entities = {Localizacao.class}, version = 1)
+@Database(entities = {Localizacao.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     public static final String DB_NAME="jogo-db";
     private static AppDatabase INSTANCE;

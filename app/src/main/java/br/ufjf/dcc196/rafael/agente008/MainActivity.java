@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnNovoJogo, btnVisitarLocal, btnFazerViagem, btnNovoCaso;
     private RecyclerView rvLocaisVisitados;
     private JogoRepository repo;
+    private AppDatabase db;
     private ActivityResultLauncher<Intent> launcher;
 
 
@@ -36,11 +37,11 @@ public class MainActivity extends AppCompatActivity {
 
         this.repo=new JogoRepository(getApplicationContext());
 
-        //resetData();
-
+        /*resetData();
+        this.db=AppDatabase.getInstance(getApplicationContext());
         buildViews();
         buildLauncher();
-        loadData();
+        loadData();*/
     }
 
     private void loadData(){
