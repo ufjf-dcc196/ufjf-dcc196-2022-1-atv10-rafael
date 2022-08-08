@@ -27,4 +27,10 @@ public interface LocalizacaoDAO {
 
     @Delete
     void delete(Localizacao localizacao);
+
+    @Query("DELETE from localizacao")
+    void deleteAll();
+
+    @Query("Select count(*) from localizacao")
+    Integer countAll();
 }

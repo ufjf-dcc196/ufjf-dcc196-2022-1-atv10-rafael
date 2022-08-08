@@ -36,12 +36,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        DatabaseBuilder.buildDatabase(getApplicationContext());
+        this.db=AppDatabase.getInstance(getApplicationContext());
+        DatabaseBuilder.popularDatabase(this.db);
 
         /*this.repo=new JogoRepository(getApplicationContext());
 
         resetData();
-        this.db=AppDatabase.getInstance(getApplicationContext());
+
         buildViews();
         buildLauncher();
         loadData();*/

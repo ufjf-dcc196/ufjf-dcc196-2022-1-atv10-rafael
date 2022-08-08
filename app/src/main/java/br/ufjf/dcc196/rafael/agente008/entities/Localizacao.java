@@ -22,6 +22,7 @@ public class Localizacao {
     private Integer populacao;
 
     public Localizacao() {
+        this.id=0;
         this.regiao="--";
         this.estado="--";
         this.cidade="--";

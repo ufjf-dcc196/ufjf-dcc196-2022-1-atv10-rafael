@@ -1,27 +1,104 @@
 package br.ufjf.dcc196.rafael.agente008.DAO;
 
 import android.content.Context;
-import android.os.Environment;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+import java.util.Random;
+
+import br.ufjf.dcc196.rafael.agente008.AppDatabase;
+import br.ufjf.dcc196.rafael.agente008.entities.Localizacao;
 
 public abstract class DatabaseBuilder {
 
-    public static void buildDatabase(Context context){
+    private static List<Localizacao> buildLocalizacoes(){
 
-        List<String> localizacoes=getLocalizacoes();
+        Random rand=new Random();
 
+        List<String> cidadesStr= getCidades();
+        List<String> estabelecimentos=getEstabelecimentos();
+        List<Localizacao> localizacoes = new ArrayList<>();
+
+        for(String s: cidadesStr){
+            String[] elementos = s.split(";");
+
+            Localizacao localizacao = new Localizacao();
+
+            localizacao.setRegiao(elementos[0]);
+            localizacao.setEstado(elementos[1]);
+            localizacao.setCidade(elementos[2]);
+            localizacao.setPopulacao(Integer.valueOf(elementos[3]));
+
+            localizacao.setLocal("Delegacia");
+            localizacoes.add(localizacao);
+
+            localizacao=localizacao.clone();
+            localizacao.setLocal("Rodoviaria");
+            localizacoes.add(localizacao);
+
+            if(localizacao.getPopulacao()>500000){
+                localizacao=localizacao.clone();
+                localizacao.setLocal("Aeroporto");
+                localizacoes.add(localizacao);
+            }
+
+            //Limitando a quantidade maxima de estabelecimentos por tamanho de cidade
+            Integer quantidadeMaxima;
+
+            if (localizacao.getPopulacao() <= 100000) {
+                quantidadeMaxima=2;
+            } else if (localizacao.getPopulacao() >= 100000 && localizacao.getPopulacao() < 500000) {
+                quantidadeMaxima = 3;
+            } else if (localizacao.getPopulacao() >= 500000 && localizacao.getPopulacao() < 1000000) {
+                quantidadeMaxima = 4;
+            } else{
+                quantidadeMaxima=5;
+            }
+
+            for(String sE: estabelecimentos){
+
+                Integer quantidade=1+ rand.nextInt(quantidadeMaxima);
+
+                for(Integer i=0;i<quantidade;i++){
+                    localizacao=localizacao.clone();
+                    localizacao.setLocal(sE+" "+String.valueOf(i+1));
+                    localizacoes.add(localizacao);
+                }
+            }
+
+        }
+
+
+        return localizacoes;
+
+    }
+
+    public static void popularDatabase(AppDatabase db){
+
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                Integer count = db.localizacaoDAO().countAll();
+                if(count>0) {
+                    db.localizacaoDAO().deleteAll();
+                }
+
+                List<Localizacao> localizacoes=buildLocalizacoes();
+
+                for(Localizacao l: localizacoes){
+                    db.localizacaoDAO().insertLocalizacao(l);
+                }
+
+                List<Localizacao> localizacoesTeste = db.localizacaoDAO().findAll();
+            }
+        }).start();
 
 
     }
 
-    public static List<String> getLocalizacoes(){
+    private static List<String> getCidades(){
         List<String> localizacoes = new ArrayList<String>();
 
         localizacoes.add("N;RO;Alta Floresta D´oeste;24392;M");
@@ -248,7 +325,7 @@ public abstract class DatabaseBuilder {
         localizacoes.add("N;PA;Melgaço;24808;M");
         localizacoes.add("N;PA;Mocajuba;26731;M");
         localizacoes.add("N;PA;Moju;70018;M");
-        localizacoes.add("N;PA;Mojuí dos Campos;M");
+        localizacoes.add("N;PA;Mojuí dos Campos;16282;M");
         localizacoes.add("N;PA;Monte Alegre;55462;M");
         localizacoes.add("N;PA;Muaná;34204;M");
         localizacoes.add("N;PA;Nova Esperança do Piriá;20158;M");
@@ -4527,7 +4604,7 @@ public abstract class DatabaseBuilder {
         localizacoes.add("S;SC;Pedras Grandes;4107;M");
         localizacoes.add("S;SC;Penha;25141;M");
         localizacoes.add("S;SC;Peritiba;2988;M");
-        localizacoes.add("S;SC;Pescaria Brava;M");
+        localizacoes.add("S;SC;Pescaria Brava;9761;M");
         localizacoes.add("S;SC;Petrolândia;6131;M");
         localizacoes.add("S;SC;Piçarras;17078;M");
         localizacoes.add("S;SC;Pinhalzinho;16332;M");
@@ -4629,7 +4706,7 @@ public abstract class DatabaseBuilder {
         localizacoes.add("S;SC;Xavantina;4142;M");
         localizacoes.add("S;SC;Xaxim;25713;M");
         localizacoes.add("S;SC;Zortéa;2991;M");
-        localizacoes.add("S;SC;Balneário Rincão;M");
+        localizacoes.add("S;SC;Balneário Rincão;11628;M");
         localizacoes.add("S;RS;Aceguá;4394;M");
         localizacoes.add("S;RS;Água Santa;3722;M");
         localizacoes.add("S;RS;Agudo;16722;M");
@@ -4947,7 +5024,7 @@ public abstract class DatabaseBuilder {
         localizacoes.add("S;RS;Pinhal Grande;4471;M");
         localizacoes.add("S;RS;Pinheirinho do Vale;4497;M");
         localizacoes.add("S;RS;Pinheiro Machado;12780;M");
-        localizacoes.add("S;RS;Pinto Bandeira;M");
+        localizacoes.add("S;RS;Pinto Bandeira;3003;M");
         localizacoes.add("S;RS;Pirapó;2757;M");
         localizacoes.add("S;RS;Piratini;19841;M");
         localizacoes.add("S;RS;Planalto;10524;M");
@@ -5184,7 +5261,7 @@ public abstract class DatabaseBuilder {
         localizacoes.add("CO;MS;Nova Alvorada do Sul;16432;M");
         localizacoes.add("CO;MS;Nova Andradina;45585;M");
         localizacoes.add("CO;MS;Novo Horizonte do Sul;4940;M");
-        localizacoes.add("CO;MS;Paraíso das Águas;M");
+        localizacoes.add("CO;MS;Paraíso das Águas;4273;M");
         localizacoes.add("CO;MS;Paranaíba;40192;M");
         localizacoes.add("CO;MS;Paranhos;12350;M");
         localizacoes.add("CO;MS;Pedro Gomes;7967;M");
@@ -5597,5 +5674,22 @@ public abstract class DatabaseBuilder {
 
         return  localizacoes;
     }
+
+    private static List<String> getEstabelecimentos(){
+
+        List<String> estabelecimenots = new ArrayList<String>();
+
+        //Nao estarão aqui: aeroporto, rodoviária e delegacia, que serão tratados manualmente
+        estabelecimenots.add("Restaurante");
+        estabelecimenots.add("Padaria");
+        estabelecimenots.add("Farmácia");
+        estabelecimenots.add("Barzinho");
+        estabelecimenots.add("Residência");
+        estabelecimenots.add("Posto de combustível");
+        estabelecimenots.add("Hospital");
+
+        return estabelecimenots;
+    }
+
 }
 
