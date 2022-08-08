@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import br.ufjf.dcc196.rafael.agente008.DAO.DatabaseBuilder;
 import br.ufjf.dcc196.rafael.agente008.entities.*;
 
 @SuppressLint({"SetTextI18n", "NonConstantResourceId"})
@@ -35,9 +36,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.repo=new JogoRepository(getApplicationContext());
+        DatabaseBuilder.buildDatabase(getApplicationContext());
 
-        /*resetData();
+        /*this.repo=new JogoRepository(getApplicationContext());
+
+        resetData();
         this.db=AppDatabase.getInstance(getApplicationContext());
         buildViews();
         buildLauncher();
