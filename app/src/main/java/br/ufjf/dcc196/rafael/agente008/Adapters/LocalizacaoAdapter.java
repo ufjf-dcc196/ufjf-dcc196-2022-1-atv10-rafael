@@ -1,6 +1,8 @@
 package br.ufjf.dcc196.rafael.agente008.Adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,18 +16,18 @@ import java.util.List;
 import br.ufjf.dcc196.rafael.agente008.AppDatabase;
 import br.ufjf.dcc196.rafael.agente008.R;
 import br.ufjf.dcc196.rafael.agente008.entities.Localizacao;
-
+@SuppressLint("NotifyDataSetChanged")
 public class LocalizacaoAdapter extends RecyclerView.Adapter<LocalizacaoAdapter.CidadeViewHolder> {
 
     private List<Localizacao> localizacoes;
     private OnLocalizacaoClickListener listener;
-
     public interface OnLocalizacaoClickListener{
         void onLocalizacaoClick(View source, int position);
     }
 
     public LocalizacaoAdapter(List<Localizacao> localizacoes, OnLocalizacaoClickListener listener){
         this.localizacoes=localizacoes;
+
         this.listener=listener;
     }
 
@@ -44,7 +46,6 @@ public class LocalizacaoAdapter extends RecyclerView.Adapter<LocalizacaoAdapter.
         Localizacao localizacao=this.localizacoes.get(position);
         holder.tvUfLayout.setText(localizacao.getEstado());
         holder.tvCidadeLayout.setText(localizacao.getCidade());
-
     }
 
     @Override
@@ -68,4 +69,10 @@ public class LocalizacaoAdapter extends RecyclerView.Adapter<LocalizacaoAdapter.
             });
         }
     }
+
+
+    public Localizacao getLocalizacao(int position){
+        return this.localizacoes.get(position);
+    }
+
 }

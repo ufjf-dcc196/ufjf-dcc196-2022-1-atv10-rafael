@@ -24,7 +24,7 @@ public class VisitarActivity extends AppCompatActivity {
         buildViews();
         setViews();
     }
-    
+
     private void buildViews(){
         //TextViews
         this.tvNomeAgenteVisita=findViewById(R.id.tvNomeAgenteVisita);
@@ -52,5 +52,5 @@ public class VisitarActivity extends AppCompatActivity {
         finish();
 
     }
-    
+
 }

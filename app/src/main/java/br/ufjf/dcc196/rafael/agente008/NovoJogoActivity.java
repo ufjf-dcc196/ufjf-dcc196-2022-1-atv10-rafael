@@ -6,11 +6,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -19,12 +22,13 @@ import br.ufjf.dcc196.rafael.agente008.entities.Localizacao;
 
 public class NovoJogoActivity extends AppCompatActivity {
 
+    private TextView tvBase;
     private EditText etNome, etCidade;
     private Spinner spUf;
     private Button btnCadastrar, btnRetornar;
     private RecyclerView rvCidades;
     private LocalizacaoAdapter localizacaoAdapter;
-    private List<Localizacao> localizacoes;
+    private Localizacao baseSelecionada;
     private AppDatabase db;
     public static final int RESULT_NOVO_JOGO = 0;
 
@@ -34,11 +38,11 @@ public class NovoJogoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_novo_jogo_activity);
 
         this.db=AppDatabase.getInstance(getApplicationContext());
+        this.baseSelecionada=null;
 
         buildViews();
         buildRv();
         buildListeners();
-
 
 
     }
@@ -50,18 +54,27 @@ public class NovoJogoActivity extends AppCompatActivity {
         LocalizacaoAdapter.OnLocalizacaoClickListener listener=new LocalizacaoAdapter.OnLocalizacaoClickListener() {
             @Override
             public void onLocalizacaoClick(View source, int position) {
-                System.out.println("teste");
+                baseSelecionada=localizacaoAdapter.getLocalizacao(position).copy();
+                baseSelecionada.setLocal("Delegacia");
+                tvBase.setText(baseSelecionada.getCidade()+" - "+baseSelecionada.getEstado());
+                habilitarBotaoCadastrar();
             }
         };
+
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                localizacoes = db.localizacaoDAO().findDistinctCidades();
+
+                if(etCidade.getText().toString().equals("")){
+                    localizacaoAdapter=new LocalizacaoAdapter(db.localizacaoDAO().findDistinctCidadesByEstado(spUf.getSelectedItem().toString()),listener);
+                }else{
+                    localizacaoAdapter=new LocalizacaoAdapter(db.localizacaoDAO().findDistinctCidadesByEstadoAndCidade(spUf.getSelectedItem().toString(),etCidade.getText().toString()),listener);
+                }
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        localizacaoAdapter=new LocalizacaoAdapter(localizacoes,listener);
                         rvCidades.setAdapter(localizacaoAdapter);
                     }
                 });
@@ -73,6 +86,9 @@ public class NovoJogoActivity extends AppCompatActivity {
 
     private void buildViews(){
         //TextViews
+        this.tvBase=findViewById(R.id.tvBase);
+
+        //Edit Text
         this.etNome=findViewById(R.id.etNome);
         this.spUf=findViewById(R.id.spUfBase);
         this.etCidade=findViewById(R.id.etCidadeBase);
@@ -86,12 +102,11 @@ public class NovoJogoActivity extends AppCompatActivity {
     }
 
     private void buildListeners(){
+        //Spinner listener
         this.spUf.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                //TODO implementar listener do Spinner
-                String str=spUf.getSelectedItem().toString();
-                String s2tr=spUf.getSelectedItem().toString();
+                buildRv();
             }
 
             @Override
@@ -100,14 +115,59 @@ public class NovoJogoActivity extends AppCompatActivity {
             }
         });
 
+        //Cidade EditText listener
+        this.etCidade.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                buildRv();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        //Nome EditText Listener
+        this.etNome.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                habilitarBotaoCadastrar();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
     }
+
+    public void habilitarBotaoCadastrar(){
+        if(this.baseSelecionada!=null && !this.etNome.getText().toString().equals("")){
+            this.btnCadastrar.setEnabled(true);
+        }else{
+            this.btnCadastrar.setEnabled(false);
+        }
+    }
+
 
     public void cadastrarClick(View v){
         if(!this.etNome.getText().toString().equals("")) {
             Intent resultado = new Intent();
             resultado.putExtra("nomeAgente", this.etNome.getText().toString());
-            resultado.putExtra("cidadeAgente", "Juiz de Fora");
-            resultado.putExtra("ufAgente", "MG");
+            resultado.putExtra("cidadeAgente", this.baseSelecionada.getCidade());
+            resultado.putExtra("ufAgente", this.baseSelecionada.getEstado());
             setResult(RESULT_NOVO_JOGO, resultado);
             finish();
         }
@@ -115,9 +175,9 @@ public class NovoJogoActivity extends AppCompatActivity {
     }
 
     public void retornarClick(View v){
-            Intent resultado = new Intent();
-            setResult(-1, resultado);
-            finish();
+        Intent resultado = new Intent();
+        setResult(-1, resultado);
+        finish();
 
     }
 }

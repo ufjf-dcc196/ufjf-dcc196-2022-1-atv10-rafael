@@ -5,6 +5,10 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 @Entity(tableName = "localizacao")
 public class Localizacao {
 
@@ -80,9 +84,113 @@ public class Localizacao {
         return clone;
     }
 
+
+    //Randomiza um dos locais da cidade (Usado pra geração do criminoso)
+    public static Localizacao randLocalDaCidade(Random rand, Localizacao localAtual, List<Localizacao> localizacoes){
+//TODO ta dando pau aqui
+        List<Localizacao> locaisCidadeAtual=new ArrayList<Localizacao>();
+
+        for(Localizacao l: localizacoes){
+            if(l.cidade.equals(localAtual.cidade)){
+                locaisCidadeAtual.add(l);
+            }
+        }
+
+        return locaisCidadeAtual.get(rand.nextInt(locaisCidadeAtual.size()));
+    }
+
+    public static Localizacao randDestino(Random rand, Localizacao localAtual, List<Localizacao> localizacoes){
+
+        if(localAtual.getLocal().equals("Rodoviária") || localAtual.getLocal().equals("Aeroporto")){
+            return randViagem(rand,localAtual,localizacoes);
+        }
+        return randLocalDaCidade(rand,localAtual,localizacoes);
+
+    }
+
+    //Randomiza um local de Destino
+    public static Localizacao randViagem(Random rand, Localizacao localAtual, List<Localizacao> localizacoes){
+
+        Localizacao destino;
+
+        if(localAtual.local.equals("Aeroporto")){
+            do{
+                destino=localizacoes.get(rand.nextInt(localizacoes.size()));
+            }while(destino.populacao<500000 && !destino.equals(localAtual));
+
+            for(Localizacao l: localizacoes){
+                if(l.cidade.equals(destino.cidade) &&
+                        l.estado.equals(destino.estado) && l.local.equals("Aeroporto")){
+                    return l;
+                }
+            }
+
+        }else{
+
+            do{
+                destino=localizacoes.get(rand.nextInt(localizacoes.size()));
+            }while(destino.regiao!=localAtual.regiao && !destino.equals(localAtual));
+
+            for(Localizacao l: localizacoes){
+                if(l.cidade.equals(destino.cidade) &&
+                        l.estado.equals(destino.estado) && l.local.equals("Rodoviária")){
+                    return l;
+                }
+            }
+        }
+
+        return destino;
+
+    }
+
+    //Verifica se este local ja foi visitado
+    public static Boolean jaVisitado(Localizacao local, List<Localizacao> rota){
+
+        for(Localizacao l:rota){
+            if (l.equals(local)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static double precificarDeslocamento(Localizacao a, Localizacao b){
+
+        if(!a.regiao.equals(b.regiao)){
+            return Caso.PRECO_VIAGEM_INTERREGIONAL;
+        }else if(!a.estado.equals(b.estado)){
+            return Caso.PRECO_VIAGEM_INTERESTADUAL;
+        }else if(!a.cidade.equals(b.cidade)){
+            return Caso.PRECO_VIAGEM_INTERMUNICIPAL;
+        }else{
+            return Caso.PRECO_VISITA;
+        }
+    }
+
+    public Localizacao copy(){
+        Localizacao localizacao=new Localizacao();
+        localizacao.id=this.id;
+        localizacao.regiao=this.regiao;
+        localizacao.estado=this.estado;
+        localizacao.cidade=this.cidade;
+        localizacao.populacao=this.populacao;
+        localizacao.local=this.local;
+        return localizacao;
+    }
+
+
     @Override
     @NonNull
     public String toString(){
         return this.local + " de " + this.cidade + "/"+this.estado;
+    }
+
+    @Override
+    public boolean equals(Object o){
+        Localizacao l=(Localizacao) o;
+        return (l.getEstado().equals(this.estado) &&
+                l.getCidade().equals(this.cidade) &&
+                l.getLocal().equals(this.local)&&
+                l.getPopulacao().equals(this.populacao));
     }
 }

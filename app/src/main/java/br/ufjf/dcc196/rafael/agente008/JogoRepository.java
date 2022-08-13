@@ -42,7 +42,6 @@ public class JogoRepository {
             jsonObj.put("status", caso.getStatus());
 
             setCriminoso(caso.getCriminoso());
-            setAgente(caso.getAgente());
 
             SharedPreferences.Editor editor = this.preferences.edit();
             editor.putString(CASO_KEY ,jsonObj.toString());
@@ -64,7 +63,6 @@ public class JogoRepository {
             caso.setDia(jsonObj.getInt("dia"));
             caso.setHora(jsonObj.getInt("hora"));
             caso.setStatus(jsonObj.getInt("status"));
-            caso.setAgente(getAgente());
             caso.setCriminoso(getCriminoso());
 
             return caso;

@@ -41,6 +41,19 @@
         app:layout_constraintStart_toStartOf="@+id/tvLabelHistorinha"
         app:layout_constraintTop_toBottomOf="@+id/etNome" />
 
+
+    <TextView
+        android:id="@+id/tvBase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="Selecione uma base"
+        android:textSize="20sp"
+        android:textStyle="italic"
+        app:layout_constraintStart_toEndOf="@+id/tvLabelBase"
+        app:layout_constraintTop_toBottomOf="@+id/etNome" />
+
     <EditText
         android:id="@+id/etNome"
         android:layout_width="0dp"
@@ -62,6 +75,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:enabled="false"
         android:onClick="cadastrarClick"
         android:text="Cadastrar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -85,7 +99,7 @@
 
     <Spinner
         android:id="@+id/spUfBase"
-        android:layout_width="85dp"
+        android:layout_width="95dp"
         android:layout_height="41dp"
         android:layout_marginTop="8dp"
         android:entries="@array/UFs"
@@ -117,5 +131,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etCidadeBase" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

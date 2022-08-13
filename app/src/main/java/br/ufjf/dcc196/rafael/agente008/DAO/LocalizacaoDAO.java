@@ -34,8 +34,20 @@ public interface LocalizacaoDAO {
     @Query("SELECT count(*) from localizacao")
     Integer countAll();
 
-    @Query("SELECT DISTINCT cidades, estado FROM localizacao ORDER BY cidades")
+    @Query("SELECT DISTINCT cidades, estado FROM localizacao order by estado")
     List<Localizacao> findDistinctCidades();
+
+    @Query("SELECT DISTINCT cidades, estado FROM localizacao WHERE estado LIKE :estado ORDER BY cidades")
+    List<Localizacao> findDistinctCidadesByEstado(String estado);
+
+    @Query("SELECT DISTINCT cidades, estado FROM localizacao WHERE cidades LIKE :cidades ||'%' ORDER BY cidades")
+    List<Localizacao> findDistinctCidadesByCidade(String cidades);
+
+    @Query("SELECT DISTINCT cidades, estado FROM localizacao WHERE estado=:estado AND cidades LIKE :cidades ||'%' ORDER BY cidades")
+    List<Localizacao> findDistinctCidadesByEstadoAndCidade(String estado, String cidades);
+
+    @Query("SELECT * FROM localizacao WHERE cidades=:cidades ")
+    List<Localizacao> findbyCidades(String cidades);
 
 
 }

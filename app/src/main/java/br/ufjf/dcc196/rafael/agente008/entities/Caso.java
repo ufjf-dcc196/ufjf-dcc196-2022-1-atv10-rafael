@@ -4,18 +4,20 @@ public class Caso {
     private Integer dia;
     private Integer hora;
     private Integer status;
-    private Agente agente;
     private Criminoso criminoso;
     public static final Integer INEXISTENTE=0;
     public static final Integer EM_ANDAMENTO=1;
     public static final Integer CONCLUIDO=2;
     public static final Integer PERDIDO=3;
+    public static final Double PRECO_VISITA=5.0;
+    public static final Double PRECO_VIAGEM_INTERMUNICIPAL=100.0;
+    public static final Double PRECO_VIAGEM_INTERESTADUAL=150.0;
+    public static final Double PRECO_VIAGEM_INTERREGIONAL=180.0;
 
     public Caso() {
         this.dia =0;
         this.hora =0;
         this.status=INEXISTENTE;
-        this.agente=new Agente();
         this.criminoso=new Criminoso();
     }
 
@@ -51,14 +53,6 @@ public class Caso {
         this.status = status;
     }
 
-    public Agente getAgente() {
-        return this.agente;
-    }
-
-    public void setAgente(Agente agente) {
-        this.agente = agente;
-    }
-
     public Criminoso getCriminoso() {
         return this.criminoso;
     }
@@ -67,13 +61,5 @@ public class Caso {
         this.criminoso = criminoso;
     }
 
-    //TODO Implementar randomização
-    public void criarCasoAutomatico(Agente agente){
-        this.agente=agente;
-        this.agente.incrDinheiro(1000.0);
-        this.criminoso.setNome("Ronaldo");
-        this.criminoso.setCrime("Roubo");
-        this.status=EM_ANDAMENTO;
 
-    }
 }
