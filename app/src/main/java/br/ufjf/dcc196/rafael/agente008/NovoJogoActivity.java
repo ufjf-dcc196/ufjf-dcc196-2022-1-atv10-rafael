@@ -15,9 +15,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.util.List;
-
-import br.ufjf.dcc196.rafael.agente008.Adapters.LocalizacaoAdapter;
+import br.ufjf.dcc196.rafael.agente008.Adapters.CidadeAdapter;
 import br.ufjf.dcc196.rafael.agente008.entities.Localizacao;
 
 public class NovoJogoActivity extends AppCompatActivity {
@@ -27,7 +25,7 @@ public class NovoJogoActivity extends AppCompatActivity {
     private Spinner spUf;
     private Button btnCadastrar, btnRetornar;
     private RecyclerView rvCidades;
-    private LocalizacaoAdapter localizacaoAdapter;
+    private CidadeAdapter cidadeAdapter;
     private Localizacao baseSelecionada;
     private AppDatabase db;
     public static final int RESULT_NOVO_JOGO = 0;
@@ -51,10 +49,10 @@ public class NovoJogoActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager=new LinearLayoutManager(this);
         this.rvCidades.setLayoutManager(layoutManager);
 
-        LocalizacaoAdapter.OnLocalizacaoClickListener listener=new LocalizacaoAdapter.OnLocalizacaoClickListener() {
+        CidadeAdapter.OnCidadeClickListener listener=new CidadeAdapter.OnCidadeClickListener() {
             @Override
-            public void onLocalizacaoClick(View source, int position) {
-                baseSelecionada=localizacaoAdapter.getLocalizacao(position).copy();
+            public void onCidadeClick(View source, int position) {
+                baseSelecionada= cidadeAdapter.getLocalizacao(position).copy();
                 baseSelecionada.setLocal("Delegacia");
                 tvBase.setText(baseSelecionada.getCidade()+" - "+baseSelecionada.getEstado());
                 habilitarBotaoCadastrar();
@@ -67,15 +65,15 @@ public class NovoJogoActivity extends AppCompatActivity {
             public void run() {
 
                 if(etCidade.getText().toString().equals("")){
-                    localizacaoAdapter=new LocalizacaoAdapter(db.localizacaoDAO().findDistinctCidadesByEstado(spUf.getSelectedItem().toString()),listener);
+                    cidadeAdapter =new CidadeAdapter(db.localizacaoDAO().findDistinctCidadesByEstado(spUf.getSelectedItem().toString()),listener);
                 }else{
-                    localizacaoAdapter=new LocalizacaoAdapter(db.localizacaoDAO().findDistinctCidadesByEstadoAndCidade(spUf.getSelectedItem().toString(),etCidade.getText().toString()),listener);
+                    cidadeAdapter =new CidadeAdapter(db.localizacaoDAO().findDistinctCidadesByEstadoAndCidade(spUf.getSelectedItem().toString(),etCidade.getText().toString()),listener);
                 }
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        rvCidades.setAdapter(localizacaoAdapter);
+                        rvCidades.setAdapter(cidadeAdapter);
                     }
                 });
             }

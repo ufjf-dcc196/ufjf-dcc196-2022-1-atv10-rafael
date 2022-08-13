@@ -8,7 +8,7 @@ public abstract class Individuo {
     private List<Localizacao> locaisVisitados;
 
     public Individuo(){
-        this.nome="--";
+        this.nome="";
         this.locaisVisitados=new ArrayList<Localizacao>();
     }
 

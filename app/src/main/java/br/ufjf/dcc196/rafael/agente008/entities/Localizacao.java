@@ -27,10 +27,10 @@ public class Localizacao {
 
     public Localizacao() {
         this.id=0;
-        this.regiao="--";
-        this.estado="--";
-        this.cidade="--";
-        this.local="--";
+        this.regiao="";
+        this.estado="";
+        this.cidade="";
+        this.local="";
         this.populacao=0;
     }
 
@@ -190,8 +190,12 @@ public class Localizacao {
 
     @Override
     @NonNull
-    public String toString(){
-        return this.local + " de " + this.cidade + "/"+this.estado;
+    public String toString() {
+        if (this.equals(new Localizacao())) {
+            return "Sem local";
+        } else {
+            return this.local + " de " + this.cidade + "/" + this.estado;
+        }
     }
 
     @Override

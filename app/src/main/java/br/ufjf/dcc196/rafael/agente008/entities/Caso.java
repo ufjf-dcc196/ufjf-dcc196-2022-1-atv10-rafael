@@ -61,5 +61,17 @@ public class Caso {
         this.criminoso = criminoso;
     }
 
+    public static String traduzirStatus(Integer status){
+        switch (status){
+            case 1:
+                return "Em andamento";
+            case 2:
+                return "Concluido";
+            case 3:
+                return "Perdido";
+
+        }
+        return "Inexistente";
+    }
 
 }

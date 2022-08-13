@@ -149,11 +149,11 @@ public class JogoRepository {
             for (int i = 1; i < jsonArray.length(); i++) {
                 Localizacao localizacao = new Localizacao();
                 JSONObject jsonObj = jsonArray.getJSONObject(i);
+                localizacao.setRegiao(jsonObj.getString("localRegiao"));
+                localizacao.setEstado(jsonObj.getString("localEstado"));
                 localizacao.setCidade(jsonObj.getString("localCidade"));
-                localizacao.setCidade(jsonObj.getString("localEstado"));
-                localizacao.setCidade(jsonObj.getString("localRegiao"));
-                localizacao.setCidade(jsonObj.getString("localPopulacao"));
-                localizacao.setCidade(jsonObj.getString("localLocal"));
+                localizacao.setPopulacao(jsonObj.getInt("localPopulacao"));
+                localizacao.setLocal(jsonObj.getString("localLocal"));
 
                 localizacoes.add(localizacao);
 

@@ -11,7 +11,7 @@ public class Criminoso extends Individuo {
 
     public Criminoso() {
         super();
-        this.crime="--";
+        this.crime="";
     }
 
     public String getCrime() {
