@@ -40,7 +40,7 @@ public class Criminoso extends Individuo {
         List<Localizacao> rota = getLocaisVisitados();
 
         //Definindo primeiro local do criminoso
-        rota.add(Localizacao.randLocalDaCidade(rand,agente.getBase(), localizacoes));
+        rota.add(Localizacao.randLocalDaCidade(rand,agente.getBase(),rota, localizacoes));
 
         Double custo;
         Localizacao localAtual;
@@ -52,9 +52,7 @@ public class Criminoso extends Individuo {
         while(continuar){
             localAtual=rota.get(rota.size()-1);
 
-            do {
-                localEscolhido=Localizacao.randDestino(rand,localAtual,localizacoes);
-            }while (Localizacao.jaVisitado(localEscolhido,rota));
+            localEscolhido=Localizacao.randDestino(rand,rota,localizacoes);
 
             custo=Localizacao.precificarDeslocamento(localAtual,localEscolhido);
 

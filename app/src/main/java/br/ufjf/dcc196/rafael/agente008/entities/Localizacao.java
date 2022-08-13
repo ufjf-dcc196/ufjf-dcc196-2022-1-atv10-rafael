@@ -86,12 +86,12 @@ public class Localizacao {
 
 
     //Randomiza um dos locais da cidade (Usado pra geração do criminoso)
-    public static Localizacao randLocalDaCidade(Random rand, Localizacao localAtual, List<Localizacao> localizacoes){
+    public static Localizacao randLocalDaCidade(Random rand, Localizacao localAtual , List<Localizacao> rota, List<Localizacao> localizacoes){
 //TODO ta dando pau aqui
         List<Localizacao> locaisCidadeAtual=new ArrayList<Localizacao>();
 
         for(Localizacao l: localizacoes){
-            if(l.cidade.equals(localAtual.cidade)){
+            if(l.cidade.equals(localAtual.cidade) && (!jaVisitado(l,rota) || l.local.equals("Rodoviaria")|| l.local.equals("Aeroporto")) && !l.local.equals("Delegacia")){
                 locaisCidadeAtual.add(l);
             }
         }
@@ -99,50 +99,59 @@ public class Localizacao {
         return locaisCidadeAtual.get(rand.nextInt(locaisCidadeAtual.size()));
     }
 
-    public static Localizacao randDestino(Random rand, Localizacao localAtual, List<Localizacao> localizacoes){
-
-        if(localAtual.getLocal().equals("Rodoviária") || localAtual.getLocal().equals("Aeroporto")){
+    public static Localizacao randDestino(Random rand, List<Localizacao> rota, List<Localizacao> localizacoes){
+        Localizacao localAtual=rota.get(rota.size()-1);
+        if(!localAtual.chegouAgora(rota) && (localAtual.getLocal().equals("Rodoviaria") || localAtual.getLocal().equals("Aeroporto"))){
             return randViagem(rand,localAtual,localizacoes);
         }
-        return randLocalDaCidade(rand,localAtual,localizacoes);
+        return randLocalDaCidade(rand,localAtual, rota,localizacoes);
 
+    }
+
+    private Boolean chegouAgora(List<Localizacao> rota){
+
+        if(rota.size()>1 && rota.get(rota.size()-1).local.equals(rota.get(rota.size()-2).local)) {
+            return true;
+        }
+        return false;
     }
 
     //Randomiza um local de Destino
     public static Localizacao randViagem(Random rand, Localizacao localAtual, List<Localizacao> localizacoes){
 
+        List<Localizacao> destinos;
         Localizacao destino;
 
         if(localAtual.local.equals("Aeroporto")){
-            do{
-                destino=localizacoes.get(rand.nextInt(localizacoes.size()));
-            }while(destino.populacao<500000 && !destino.equals(localAtual));
-
-            for(Localizacao l: localizacoes){
-                if(l.cidade.equals(destino.cidade) &&
-                        l.estado.equals(destino.estado) && l.local.equals("Aeroporto")){
-                    return l;
-                }
-            }
-
-        }else{
-
-            do{
-                destino=localizacoes.get(rand.nextInt(localizacoes.size()));
-            }while(destino.regiao!=localAtual.regiao && !destino.equals(localAtual));
-
-            for(Localizacao l: localizacoes){
-                if(l.cidade.equals(destino.cidade) &&
-                        l.estado.equals(destino.estado) && l.local.equals("Rodoviária")){
-                    return l;
-                }
-            }
+            destinos=getAeroportos(localizacoes);
+        }else {
+            destinos = getRodoviarias(localizacoes, localAtual);
         }
 
-        return destino;
+        return destinos.get(rand.nextInt(destinos.size()));
 
     }
 
+    //Retorna todos os aeroportos
+    private static List<Localizacao> getAeroportos(List<Localizacao> localizacoes){
+        List<Localizacao> aeroportos=new ArrayList<Localizacao>();
+        for(Localizacao l: localizacoes){
+            if(l.local.equals("Aeroporto")){
+                aeroportos.add(l);
+            }
+        }
+        return aeroportos;
+    }
+    //Retorna todas as rodoviarias
+    private static List<Localizacao> getRodoviarias(List<Localizacao> localizacoes, Localizacao origem){
+        List<Localizacao> rodoviarias=new ArrayList<Localizacao>();
+        for(Localizacao l: localizacoes){
+            if(l.local.equals("Rodoviaria") && l.regiao.equals(origem.regiao) && !l.cidade.equals(origem.cidade)){
+                rodoviarias.add(l);
+            }
+        }
+        return rodoviarias;
+    }
     //Verifica se este local ja foi visitado
     public static Boolean jaVisitado(Localizacao local, List<Localizacao> rota){
 
