@@ -66,4 +66,7 @@ public class LocalizacaoAdapter extends RecyclerView.Adapter<LocalizacaoAdapter.
             });
         }
     }
+    public Localizacao getLocalizacao(int position){
+        return this.localizacoes.get(position);
+    }
 }

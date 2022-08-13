@@ -18,6 +18,16 @@
         app:layout_constraintTop_toBottomOf="@+id/tvLabelLocalizacaoAtualVisita" />
 
     <TextView
+        android:id="@+id/tvLocalSelecionado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/tvLabelIrVisita"
+        app:layout_constraintTop_toBottomOf="@+id/tvLabelIrVisita" />
+
+    <TextView
         android:id="@+id/tvTempoVisita"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -182,6 +192,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
+        android:enabled="false"
+        android:onClick="visitarClick"
         android:text="Visitar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -220,7 +232,7 @@
         android:layout_width="0dp"
         android:layout_height="213dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

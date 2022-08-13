@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         //DatabaseBuilder.popularDatabase(this.db);*/
         this.repo=new JogoRepository(getApplicationContext());
 
-        resetData();
+        //resetData();
         buildLauncher();
         buildViews();
         //Carregando as Localizações
@@ -71,14 +71,10 @@ public class MainActivity extends AppCompatActivity {
     private void loadData(){
         Agente agente=this.repo.getAgente();
 
-        if(agente.existe()) {
-            this.tvNomeAgente.setText(agente.getNome().toString());
-            this.tvDinheiro.setText("R$" + agente.getDinheiro().toString() + "0");
-            this.tvLocalizacaoAtual.setText(agente.getBase().toString());
-            this.btnNovoCaso.setEnabled(true);
-        }else{
-            noAgenteViewsSet();
-        }
+        this.tvNomeAgente.setText(agente.getNome().toString());
+        this.tvDinheiro.setText("R$" + agente.getDinheiro().toString() + "0");
+        this.tvLocalizacaoAtual.setText(agente.getBase().toString());
+        this.btnNovoCaso.setEnabled(true);
 
         Caso caso=this.repo.getCaso();
 
@@ -88,9 +84,12 @@ public class MainActivity extends AppCompatActivity {
         this.tvNomeCriminoso.setText(caso.getCriminoso().getNome().toString());
         this.tvCrime.setText(caso.getCriminoso().getCrime().toString());
 
-        if(caso.getStatus()==Caso.INEXISTENTE){
+        if(!agente.existe()){
+            noAgenteViewsSet();
+        }else if(caso.getStatus()==Caso.INEXISTENTE){
             noCasoViewsSet();
         }else{
+            hasCasoViewSet();
             buildRv();
         }
 
@@ -216,11 +215,10 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.btnNovoCaso:
                     gerarCaso();
-                    loadData();
                     break;
-
             }
 
+            loadData();
             this.launcher.launch(intent);
         }catch (Exception e){
             e.printStackTrace();
