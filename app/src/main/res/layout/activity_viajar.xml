@@ -136,7 +136,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tvNomeAgenteViagem" />
 
     <TextView
-        android:id="@+id/tvDinheiroViagem"
+        android:id="@+id/tvDinheiroViajar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -178,11 +178,12 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:enabled="false"
+        android:onClick="viajarClick"
         android:text="Viajar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rvCidadesViajar" />
+        app:layout_constraintTop_toBottomOf="@+id/rvCidadesViagem" />
 
     <Button
         android:id="@+id/btnRetornaViagem"
@@ -199,32 +200,21 @@
         app:layout_constraintTop_toBottomOf="@+id/btnFazerViagem" />
 
     <EditText
-        android:id="@+id/etUfViajar"
-        android:layout_width="78dp"
-        android:layout_height="41dp"
-        android:layout_marginTop="16dp"
-        android:ems="10"
-        android:hint="UF"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="@+id/tvLabelIrViagem"
-        app:layout_constraintTop_toBottomOf="@+id/tvLabelCustoViagem" />
-
-    <EditText
         android:id="@+id/etCidadeViajar"
         android:layout_width="0dp"
         android:layout_height="41dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:ems="10"
         android:hint="Cidade"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/etUfViajar"
+        app:layout_constraintStart_toEndOf="@+id/spUfViajar"
         app:layout_constraintTop_toBottomOf="@+id/tvLabelCustoViagem" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvCidadesViajar"
+        android:id="@+id/rvCidadesViagem"
         android:layout_width="0dp"
         android:layout_height="244dp"
         android:layout_marginStart="8dp"
@@ -233,5 +223,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etCidadeViajar" />
+
+    <Spinner
+        android:id="@+id/spUfViajar"
+        android:layout_width="95dp"
+        android:layout_height="41dp"
+        android:layout_marginTop="16dp"
+        android:entries="@array/UFs"
+        app:layout_constraintStart_toStartOf="@+id/tvLabelIrViagem"
+        app:layout_constraintTop_toBottomOf="@+id/tvLabelCustoViagem" />
+
+    <TextView
+        android:id="@+id/tvCidadeSelecionada"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@+id/tvLabelIrViagem"
+        app:layout_constraintTop_toBottomOf="@+id/tvLabelIrViagem" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

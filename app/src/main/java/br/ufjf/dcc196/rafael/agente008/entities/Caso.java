@@ -13,6 +13,10 @@ public class Caso {
     public static final Double PRECO_VIAGEM_INTERMUNICIPAL=100.0;
     public static final Double PRECO_VIAGEM_INTERESTADUAL=150.0;
     public static final Double PRECO_VIAGEM_INTERREGIONAL=180.0;
+    public static final Integer HORAS_VISITA=1;
+    public static final Integer HORAS_VIAGEM_INTERMUNICIPAL=2;
+    public static final Integer HORAS_VIAGEM_INTERESTADUAL=3;
+    public static final Integer HORAS_VIAGEM_INTERREGIONAL=4;
 
     public Caso() {
         this.dia =0;

@@ -42,7 +42,6 @@ public class NovoJogoActivity extends AppCompatActivity {
         buildRv();
         buildListeners();
 
-
     }
 
     private void buildRv(){
@@ -65,9 +64,9 @@ public class NovoJogoActivity extends AppCompatActivity {
             public void run() {
 
                 if(etCidade.getText().toString().equals("")){
-                    cidadeAdapter =new CidadeAdapter(db.localizacaoDAO().findDistinctCidadesByEstado(spUf.getSelectedItem().toString()),listener);
+                    cidadeAdapter =new CidadeAdapter(db.localizacaoDAO().findDistinctCidadesByEstado(spUf.getSelectedItem().toString(),"Delegacia"),listener);
                 }else{
-                    cidadeAdapter =new CidadeAdapter(db.localizacaoDAO().findDistinctCidadesByEstadoAndCidade(spUf.getSelectedItem().toString(),etCidade.getText().toString()),listener);
+                    cidadeAdapter =new CidadeAdapter(db.localizacaoDAO().findDistinctCidadesByEstadoAndCidade(spUf.getSelectedItem().toString(),etCidade.getText().toString(),"Delegacia"),listener);
                 }
 
                 runOnUiThread(new Runnable() {

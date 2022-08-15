@@ -163,7 +163,7 @@ public class Localizacao {
         return false;
     }
 
-    public static double precificarDeslocamento(Localizacao a, Localizacao b){
+    public static Double precificarDeslocamento(Localizacao a, Localizacao b){
 
         if(!a.regiao.equals(b.regiao)){
             return Caso.PRECO_VIAGEM_INTERREGIONAL;
@@ -173,6 +173,19 @@ public class Localizacao {
             return Caso.PRECO_VIAGEM_INTERMUNICIPAL;
         }else{
             return Caso.PRECO_VISITA;
+        }
+    }
+
+    public static Integer quantificarTempo(Localizacao a, Localizacao b){
+
+        if(!a.regiao.equals(b.regiao)){
+            return Caso.HORAS_VIAGEM_INTERREGIONAL;
+        }else if(!a.estado.equals(b.estado)){
+            return Caso.HORAS_VIAGEM_INTERESTADUAL;
+        }else if(!a.cidade.equals(b.cidade)){
+            return Caso.HORAS_VIAGEM_INTERMUNICIPAL;
+        }else{
+            return Caso.HORAS_VISITA;
         }
     }
 

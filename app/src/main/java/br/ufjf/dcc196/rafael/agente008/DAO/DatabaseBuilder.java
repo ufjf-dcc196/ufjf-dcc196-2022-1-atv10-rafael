@@ -34,7 +34,7 @@ public abstract class DatabaseBuilder {
             localizacao.setLocal("Rodoviaria");
             localizacoes.add(localizacao);
 
-            if(localizacao.getPopulacao()>500000){
+            if(localizacao.getPopulacao()>150000){
                 localizacao=localizacao.clone();
                 localizacao.setLocal("Aeroporto");
                 localizacoes.add(localizacao);

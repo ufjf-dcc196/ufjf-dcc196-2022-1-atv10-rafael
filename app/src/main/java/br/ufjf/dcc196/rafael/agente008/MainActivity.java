@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Random;
 
 import br.ufjf.dcc196.rafael.agente008.Adapters.LocalizacaoAdapter;
+import br.ufjf.dcc196.rafael.agente008.DAO.DatabaseBuilder;
 import br.ufjf.dcc196.rafael.agente008.entities.*;
 
 @SuppressLint({"SetTextI18n", "NonConstantResourceId"})
@@ -32,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private AppDatabase db;
     private ActivityResultLauncher<Intent> launcher;
     private List<Localizacao> localizacoes;
+    private Agente agente;
+    private Caso caso;
     private LocalizacaoAdapter localizacaoAdapter;
     private Random rand;
 
@@ -41,11 +44,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.rand=new Random();
         this.db=AppDatabase.getInstance(getApplicationContext());
-        //DatabaseBuilder.popularDatabase(this.db);*/
+        this.rand=new Random();
         this.repo=new JogoRepository(getApplicationContext());
 
+        //DatabaseBuilder.popularLocalizacoes(this.db);
         //resetData();
         buildLauncher();
         buildViews();
@@ -69,11 +72,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadData(){
-        Agente agente=this.repo.getAgente();
+        this.agente=this.repo.getAgente();
 
-        this.tvNomeAgente.setText(agente.getNome().toString());
-        this.tvDinheiro.setText("R$" + agente.getDinheiro().toString() + "0");
-        this.tvLocalizacaoAtual.setText(agente.getBase().toString());
+        this.tvNomeAgente.setText(this.agente.getNome().toString());
+        this.tvDinheiro.setText("R$" + this.agente.getDinheiro().toString() + "0");
+        this.tvLocalizacaoAtual.setText(this.agente.getBase().toString());
         this.btnNovoCaso.setEnabled(true);
 
         Caso caso=this.repo.getCaso();
@@ -84,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         this.tvNomeCriminoso.setText(caso.getCriminoso().getNome().toString());
         this.tvCrime.setText(caso.getCriminoso().getCrime().toString());
 
-        if(!agente.existe()){
+        if(!this.agente.existe()){
             noAgenteViewsSet();
         }else if(caso.getStatus()==Caso.INEXISTENTE){
             noCasoViewsSet();
@@ -96,8 +99,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void resetData(){
-        this.repo.setAgente(new Agente());
-        this.repo.setCaso(new Caso());
+        this.agente=new Agente();
+        this.caso=new Caso();
+        this.repo.setAgente(this.agente);
+        this.repo.setCaso(this.caso);
     }
 
     private void buildRv(){
@@ -161,24 +166,24 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void criarAgente(Bundle extras){
-        Agente agente = new Agente();
+        this.agente = new Agente();
 
-        agente.setNome(extras.getString("nomeAgente"));
+        this.agente.setNome(extras.getString("nomeAgente"));
 
 
         for(Localizacao l: this.localizacoes){
             if(l.getCidade().equals(extras.getString("cidadeAgente")) &&
                     l.getEstado().equals(extras.getString("ufAgente"))&&
                     l.getLocal().equals("Delegacia")){
-                agente.setBase(l);
+                this.agente.setBase(l);
                 break;
             }
         }
 
-        agente.setExiste(true);
-        agente.setLocaisVisitados(new ArrayList<Localizacao>(){{add(agente.getBase().clone());}});
+        this.agente.setExiste(true);
+        this.agente.setLocaisVisitados(new ArrayList<Localizacao>(){{add(agente.getBase().clone());}});
         this.btnNovoCaso.setEnabled(true);
-        this.repo.setAgente(agente);
+        this.repo.setAgente(this.agente);
     }
 
     public void gerarCaso(){
@@ -188,10 +193,10 @@ public class MainActivity extends AppCompatActivity {
         this.repo.setCaso(caso);
 
         //Adicionando 1000 reais ao agente para o novo caso
-        Agente agente=this.repo.getAgente();
-        agente.setDinheiro(agente.getDinheiro()+1000.0);
-        agente.setLocaisVisitados(new ArrayList<Localizacao>());
-        agente.getLocaisVisitados().add(agente.getBase());
+        this.agente=this.repo.getAgente();
+        this.agente.setDinheiro(this.agente.getDinheiro()+1000.0);
+        this.agente.setLocaisVisitados(new ArrayList<Localizacao>());
+        this.agente.getLocaisVisitados().add(this.agente.getBase());
 
         this.repo.setAgente(agente);
 
@@ -237,8 +242,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void hasCasoViewSet(){
         this.btnNovoCaso.setEnabled(false);
-        this.btnFazerViagem.setEnabled(true);
         this.btnVisitarLocal.setEnabled(true);
+        if(this.agente.getLocalizacaoAtual().getLocal().equals("Aeroporto") || this.agente.getLocalizacaoAtual().getLocal().equals("Rodoviaria")) {
+            this.btnFazerViagem.setEnabled(true);
+        }
     }
 
 

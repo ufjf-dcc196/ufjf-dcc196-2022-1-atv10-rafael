@@ -22,7 +22,6 @@ import br.ufjf.dcc196.rafael.agente008.entities.Localizacao;
 public class VisitarActivity extends AppCompatActivity {
 
     private TextView tvNomeAgenteVisita, tvDinheiroVisita,tvDiaVisita, tvHoraVisita, tvLocalSelecionado, tvLocalizacaoAtualVisita, tvCustoVisita, tvTempoVisita;
-    private Spinner spUfVisita, spMunicipioVisita;
     private Button btnVisitarVisita, btnRetornarVisita;
     private RecyclerView rvLocaisVisita;
     private JogoRepository repo;
@@ -71,7 +70,7 @@ public class VisitarActivity extends AppCompatActivity {
         @Override
         public void run() {
             String cidade =agente.getLocaisVisitados().get(agente.getLocaisVisitados().size()-1).getCidade();
-            localizacoes=db.localizacaoDAO().findbyCidades(cidade);
+            localizacoes=db.localizacaoDAO().findLocaisbyCidades(cidade);
 
             runOnUiThread(new Runnable() {
                 @Override
@@ -97,7 +96,7 @@ public class VisitarActivity extends AppCompatActivity {
             public void onLocalizacaoClick(View source, int position) {
                 tvLocalSelecionado.setText(localizacaoAdapter.getLocalizacao(position).toString());
                 tvCustoVisita.setText("R$5.00");
-                tvTempoVisita.setText("1h");
+                tvTempoVisita.setText(String.valueOf(Caso.HORAS_VISITA)+"h");
                 btnVisitarVisita.setEnabled(true);
                 localEscolhido=localizacaoAdapter.getLocalizacao(position);
 
