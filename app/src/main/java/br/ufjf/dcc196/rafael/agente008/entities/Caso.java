@@ -9,6 +9,7 @@ public class Caso {
     public static final Integer EM_ANDAMENTO=1;
     public static final Integer CONCLUIDO=2;
     public static final Integer PERDIDO=3;
+    public static final Integer FALIU=4;
     public static final Double PRECO_VISITA=5.0;
     public static final Double PRECO_VIAGEM_INTERMUNICIPAL=100.0;
     public static final Double PRECO_VIAGEM_INTERESTADUAL=150.0;
@@ -17,6 +18,7 @@ public class Caso {
     public static final Integer HORAS_VIAGEM_INTERMUNICIPAL=2;
     public static final Integer HORAS_VIAGEM_INTERESTADUAL=3;
     public static final Integer HORAS_VIAGEM_INTERREGIONAL=4;
+    public static final Integer HORAS_TRABALHADAS_POR_DIA=16;
 
     public Caso() {
         this.dia =0;

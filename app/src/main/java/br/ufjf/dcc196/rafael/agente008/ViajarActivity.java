@@ -194,11 +194,21 @@ public class ViajarActivity extends AppCompatActivity {
         Intent resultado = new Intent();
         this.agente.setDinheiro(this.agente.getDinheiro()-this.precoViagem);
         this.caso.setHora(this.caso.getHora()+this.horasViagem);
+        this.agente.getLocaisVisitados().add(this.cidadeSelecionada);
 
-        this.repo.setAgente(agente);
-        this.repo.setCaso(caso);
+        if(this.agente.getDinheiro()<0.0){
+            this.caso.setStatus(Caso.FALIU);
+        }else if(this.agente.getLocalizacaoAtual().equals(this.caso.getCriminoso().getLocalizacaoAtual())){
+            this.caso.setStatus(Caso.CONCLUIDO);
+        }else if(this.caso.getHora()>=Caso.HORAS_TRABALHADAS_POR_DIA){
+            this.caso.incrDia();
+            this.caso.setHora(0);
+        }
 
-        setResult(-1, resultado);
+        this.repo.setAgente(this.agente);
+        this.repo.setCaso(this.caso);
+
+        setResult(RESULT_VIAJAR, resultado);
         finish();
 
     }

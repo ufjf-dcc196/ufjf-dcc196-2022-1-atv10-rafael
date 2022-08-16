@@ -4,11 +4,13 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -48,8 +50,10 @@ public class MainActivity extends AppCompatActivity {
         this.rand=new Random();
         this.repo=new JogoRepository(getApplicationContext());
 
+
         //DatabaseBuilder.popularLocalizacoes(this.db);
-        //resetData();
+        this.repo.setAgente(new Agente());
+        resetCaso();
         buildLauncher();
         buildViews();
         //Carregando as Localizações
@@ -79,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         this.tvLocalizacaoAtual.setText(this.agente.getBase().toString());
         this.btnNovoCaso.setEnabled(true);
 
-        Caso caso=this.repo.getCaso();
+        this.caso=this.repo.getCaso();
 
         this.tvDia.setText(caso.getDia().toString());
         this.tvHora.setText(caso.getHora().toString());
@@ -98,10 +102,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void resetData(){
-        this.agente=new Agente();
+    private void resetCaso(){
+        //this.agente=new Agente();
         this.caso=new Caso();
-        this.repo.setAgente(this.agente);
+        //this.repo.setAgente(this.agente);
         this.repo.setCaso(this.caso);
     }
 
@@ -143,54 +147,38 @@ public class MainActivity extends AppCompatActivity {
         this.launcher= registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult result) {
-                assert result.getData() != null;
-                Bundle extras = result.getData().getExtras();
 
                 if(result.getResultCode()==NovoJogoActivity.RESULT_NOVO_JOGO){
-                    resetData();
-                    criarAgente(extras);
-
+                    resetCaso();
+                    btnNovoCaso.setEnabled(true);
+                    loadData();
                 } else if(result.getResultCode()==VisitarActivity.RESULT_VISITAR){
-                    //TODO implementar
+                    verificarJogo();
                 } else if(result.getResultCode()==ViajarActivity.RESULT_VIAJAR){
-                    //TODO implementar
+                    verificarJogo();
                 }
-
-                loadData();
-
 
             }
         });
 
     }
 
-
-    private void criarAgente(Bundle extras){
-        this.agente = new Agente();
-
-        this.agente.setNome(extras.getString("nomeAgente"));
-
-
-        for(Localizacao l: this.localizacoes){
-            if(l.getCidade().equals(extras.getString("cidadeAgente")) &&
-                    l.getEstado().equals(extras.getString("ufAgente"))&&
-                    l.getLocal().equals("Delegacia")){
-                this.agente.setBase(l);
-                break;
-            }
+    private void verificarJogo(){
+        loadData();
+        if(this.caso.getStatus().equals(Caso.FALIU)){
+            System.out.println("Voce faliu!");
+        }else if(this.caso.getStatus().equals(Caso.CONCLUIDO)){
+            System.out.println("Parabéns! Voce conseguiu!");
+        }else if(this.caso.getHora().equals(0)){
+            System.out.println("Ultrapassadas as 16 horas de trabalho diario, novo dia");
         }
-
-        this.agente.setExiste(true);
-        this.agente.setLocaisVisitados(new ArrayList<Localizacao>(){{add(agente.getBase().clone());}});
-        this.btnNovoCaso.setEnabled(true);
-        this.repo.setAgente(this.agente);
     }
 
     public void gerarCaso(){
-        Caso caso=new Caso();
-        caso.setStatus(Caso.EM_ANDAMENTO);
-        caso.setCriminoso(Criminoso.gerar(rand,this.repo.getAgente(),this.localizacoes));
-        this.repo.setCaso(caso);
+        this.caso=new Caso();
+        this.caso.setStatus(Caso.EM_ANDAMENTO);
+        this.caso.setCriminoso(Criminoso.gerar(rand,this.repo.getAgente(),this.localizacoes));
+        this.repo.setCaso(this.caso);
 
         //Adicionando 1000 reais ao agente para o novo caso
         this.agente=this.repo.getAgente();
@@ -199,35 +187,9 @@ public class MainActivity extends AppCompatActivity {
         this.agente.getLocaisVisitados().add(this.agente.getBase());
 
         this.repo.setAgente(agente);
-
+        System.out.println("O bandido esta em "+this.caso.getCriminoso().getLocalizacaoAtual().toString());
         this.btnNovoCaso.setEnabled(false);
         hasCasoViewSet();
-    }
-
-    public void clickBotoes(View v){
-        try {
-            Intent intent=null;
-
-            switch (v.getId()){
-                case R.id.btnNovoJogo:
-                    intent = new Intent(MainActivity.this,NovoJogoActivity.class);
-                    break;
-                case R.id.btnVisitarLocal:
-                    intent = new Intent(MainActivity.this,VisitarActivity.class);
-                    break;
-                case R.id.btnFazerViagem:
-                    intent = new Intent(MainActivity.this,ViajarActivity.class);
-                    break;
-                case R.id.btnNovoCaso:
-                    gerarCaso();
-                    break;
-            }
-
-            loadData();
-            this.launcher.launch(intent);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
     }
 
     private void noAgenteViewsSet(){
@@ -246,6 +208,53 @@ public class MainActivity extends AppCompatActivity {
         if(this.agente.getLocalizacaoAtual().getLocal().equals("Aeroporto") || this.agente.getLocalizacaoAtual().getLocal().equals("Rodoviaria")) {
             this.btnFazerViagem.setEnabled(true);
         }
+    }
+
+//--Funções de tratamento para click nos botões
+
+    public void clickBotoes(View v){
+        try {
+            Intent intent=null;
+
+            switch (v.getId()){
+                case R.id.btnVisitarLocal:
+                    intent = new Intent(MainActivity.this,VisitarActivity.class);
+                    break;
+                case R.id.btnFazerViagem:
+                    intent = new Intent(MainActivity.this,ViajarActivity.class);
+                    break;
+                case R.id.btnNovoCaso:
+                    gerarCaso();
+                    break;
+            }
+
+            loadData();
+            this.launcher.launch(intent);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void clickNovoJogo(View v){
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle("Novo jogo!");
+        dialogBuilder.setMessage("Ao iniciar um novo jogo, você deverá criar um novo Agente e todo o progresso será perdido. Continuar?");
+        dialogBuilder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(MainActivity.this,NovoJogoActivity.class);
+                launcher.launch(intent);
+            }
+        });
+        dialogBuilder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        dialogBuilder.create();
+        dialogBuilder.show();
+
     }
 
 

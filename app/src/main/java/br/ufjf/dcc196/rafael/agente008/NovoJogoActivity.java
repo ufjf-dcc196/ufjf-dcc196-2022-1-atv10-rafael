@@ -15,7 +15,11 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import br.ufjf.dcc196.rafael.agente008.Adapters.CidadeAdapter;
+import br.ufjf.dcc196.rafael.agente008.entities.Agente;
 import br.ufjf.dcc196.rafael.agente008.entities.Localizacao;
 
 public class NovoJogoActivity extends AppCompatActivity {
@@ -28,6 +32,9 @@ public class NovoJogoActivity extends AppCompatActivity {
     private CidadeAdapter cidadeAdapter;
     private Localizacao baseSelecionada;
     private AppDatabase db;
+    private List<Localizacao> localizacoes;
+    private Agente agente;
+    private JogoRepository repo;
     public static final int RESULT_NOVO_JOGO = 0;
 
     @Override
@@ -35,6 +42,7 @@ public class NovoJogoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_novo_jogo_activity);
 
+        this.repo=new JogoRepository(getApplicationContext());
         this.db=AppDatabase.getInstance(getApplicationContext());
         this.baseSelecionada=null;
 
@@ -51,8 +59,7 @@ public class NovoJogoActivity extends AppCompatActivity {
         CidadeAdapter.OnCidadeClickListener listener=new CidadeAdapter.OnCidadeClickListener() {
             @Override
             public void onCidadeClick(View source, int position) {
-                baseSelecionada= cidadeAdapter.getLocalizacao(position).copy();
-                baseSelecionada.setLocal("Delegacia");
+                baseSelecionada= cidadeAdapter.getLocalizacao(position);
                 tvBase.setText(baseSelecionada.getCidade()+" - "+baseSelecionada.getEstado());
                 habilitarBotaoCadastrar();
             }
@@ -64,10 +71,11 @@ public class NovoJogoActivity extends AppCompatActivity {
             public void run() {
 
                 if(etCidade.getText().toString().equals("")){
-                    cidadeAdapter =new CidadeAdapter(db.localizacaoDAO().findDistinctCidadesByEstado(spUf.getSelectedItem().toString(),"Delegacia"),listener);
+                    localizacoes=db.localizacaoDAO().findDistinctCidadesByEstado(spUf.getSelectedItem().toString(),"Delegacia");
                 }else{
-                    cidadeAdapter =new CidadeAdapter(db.localizacaoDAO().findDistinctCidadesByEstadoAndCidade(spUf.getSelectedItem().toString(),etCidade.getText().toString(),"Delegacia"),listener);
+                    localizacoes=db.localizacaoDAO().findDistinctCidadesByEstadoAndCidade(spUf.getSelectedItem().toString(),etCidade.getText().toString(),"Delegacia");
                 }
+                cidadeAdapter =new CidadeAdapter(localizacoes,listener);
 
                 runOnUiThread(new Runnable() {
                     @Override
@@ -160,14 +168,16 @@ public class NovoJogoActivity extends AppCompatActivity {
 
 
     public void cadastrarClick(View v){
-        if(!this.etNome.getText().toString().equals("")) {
-            Intent resultado = new Intent();
-            resultado.putExtra("nomeAgente", this.etNome.getText().toString());
-            resultado.putExtra("cidadeAgente", this.baseSelecionada.getCidade());
-            resultado.putExtra("ufAgente", this.baseSelecionada.getEstado());
-            setResult(RESULT_NOVO_JOGO, resultado);
-            finish();
-        }
+        this.agente=new Agente();
+        this.agente.setNome(this.etNome.getText().toString());
+        this.agente.setBase(baseSelecionada);
+        this.agente.setLocaisVisitados(new ArrayList<Localizacao>(){{add(agente.getBase());}});
+        this.agente.setExiste(true);
+        this.repo.setAgente(this.agente);
+
+        Intent resultado = new Intent();
+        setResult(RESULT_NOVO_JOGO, resultado);
+        finish();
 
     }
 

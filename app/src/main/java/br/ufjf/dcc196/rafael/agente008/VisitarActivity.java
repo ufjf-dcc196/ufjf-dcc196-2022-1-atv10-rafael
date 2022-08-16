@@ -26,6 +26,8 @@ public class VisitarActivity extends AppCompatActivity {
     private RecyclerView rvLocaisVisita;
     private JogoRepository repo;
     private LocalizacaoAdapter localizacaoAdapter;
+    private Agente agente;
+    private Caso caso;
     private List<Localizacao> localizacoes;
     private Localizacao localEscolhido;
     private AppDatabase db;
@@ -129,19 +131,28 @@ public class VisitarActivity extends AppCompatActivity {
 
     public void visitarClick(View v){
 
-        Agente agente=this.repo.getAgente();
-        Caso caso=this.repo.getCaso();
+        this.agente=this.repo.getAgente();
+        this.caso=this.repo.getCaso();
 
-        agente.setDinheiro(agente.getDinheiro()-5.0);
-        agente.getLocaisVisitados().add(this.localEscolhido);
+        this.agente.setDinheiro(this.agente.getDinheiro()-5.0);
+        this.agente.getLocaisVisitados().add(this.localEscolhido);
 
-        caso.setHora(caso.getHora()+1);
+        if(this.agente.getDinheiro()<0.0){
+            this.caso.setStatus(Caso.FALIU);
+        }else if(this.agente.getLocalizacaoAtual().equals(this.caso.getCriminoso().getLocalizacaoAtual())){
+            this.caso.setStatus(Caso.CONCLUIDO);
+        }else if(this.caso.getHora()>=Caso.HORAS_TRABALHADAS_POR_DIA){
+            this.caso.incrDia();
+            this.caso.setHora(0);
+        }
 
-        this.repo.setAgente(agente);
-        this.repo.setCaso(caso);
+        this.caso.setHora(this.caso.getHora()+1);
+
+        this.repo.setAgente(this.agente);
+        this.repo.setCaso(this.caso);
 
         Intent resultado = new Intent();
-        setResult(-1, resultado);
+        setResult(RESULT_VISITAR, resultado);
         finish();
 
     }

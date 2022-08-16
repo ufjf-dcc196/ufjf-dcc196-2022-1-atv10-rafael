@@ -30,6 +30,8 @@ public class JogoRepository {
     public JogoRepository(@NonNull Context context){
         this.contexto=context;
         this.preferences= context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
+        //this.preferences.edit().clear().apply();
+        //System.out.println("Zerado");
     }
 
     public void setCaso(@NonNull Caso caso){
@@ -57,7 +59,6 @@ public class JogoRepository {
         try {
 
             Caso caso=new Caso();
-            //TODO erro aqui, verificar
             JSONObject jsonObj = new JSONObject(this.preferences.getString(CASO_KEY,"{}"));
 
             caso.setDia(jsonObj.getInt("dia"));
@@ -138,6 +139,51 @@ public class JogoRepository {
         return null;
     }
 
+    public void setCriminoso(@NonNull Criminoso criminoso){
+        try {
+            JSONArray jsonArray= new JSONArray();
+
+            JSONObject jsonObj = new JSONObject();
+
+            jsonObj.put("nomeCriminoso",criminoso.getNome());
+            jsonObj.put("crime", criminoso.getCrime());
+
+            jsonArray.put(jsonObj);
+
+            setLocalizacoes(criminoso, jsonArray);
+
+            String arrayStr=jsonArray.toString();
+
+            SharedPreferences.Editor editor = this.preferences.edit();
+            editor.putString(CRIMINOSO_KEY ,arrayStr);
+            editor.apply();
+
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+    }
+
+    public Criminoso getCriminoso(){
+        try {
+
+            JSONArray jsonArray= new JSONArray(this.preferences.getString(CRIMINOSO_KEY,"[]"));
+
+            Criminoso criminoso=new Criminoso();
+            JSONObject jsonObj = jsonArray.getJSONObject(0);
+
+            criminoso.setNome(jsonObj.getString("nomeCriminoso"));
+            criminoso.setCrime(jsonObj.getString("crime"));
+
+            criminoso.setLocaisVisitados(getLocalizacoes(criminoso, jsonArray));
+
+            return criminoso;
+
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     @Nullable
     private List<Localizacao> getLocalizacoes(Individuo individuo, @NonNull JSONArray jsonArray){
 
@@ -185,51 +231,6 @@ public class JogoRepository {
         }catch(JSONException e){
             e.printStackTrace();
         }
-    }
-
-    public void setCriminoso(@NonNull Criminoso criminoso){
-        try {
-            JSONArray jsonArray= new JSONArray();
-
-            JSONObject jsonObj = new JSONObject();
-
-            jsonObj.put("nomeCriminoso",criminoso.getNome());
-            jsonObj.put("crime", criminoso.getCrime());
-
-            jsonArray.put(jsonObj);
-
-            setLocalizacoes(criminoso, jsonArray);
-
-            String arrayStr=jsonArray.toString();
-
-            SharedPreferences.Editor editor = this.preferences.edit();
-            editor.putString(CRIMINOSO_KEY ,arrayStr);
-            editor.apply();
-
-        }catch (JSONException e){
-            e.printStackTrace();
-        }
-    }
-
-    public Criminoso getCriminoso(){
-        try {
-
-            JSONArray jsonArray= new JSONArray(this.preferences.getString(CRIMINOSO_KEY,"[]"));
-
-            Criminoso criminoso=new Criminoso();
-            JSONObject jsonObj = jsonArray.getJSONObject(0);
-
-            criminoso.setNome(jsonObj.getString("nomeCriminoso"));
-            criminoso.setCrime(jsonObj.getString("crime"));
-
-            criminoso.setLocaisVisitados(getLocalizacoes(criminoso, jsonArray));
-
-            return criminoso;
-
-        }catch (JSONException e){
-            e.printStackTrace();
-        }
-        return null;
     }
 
 }

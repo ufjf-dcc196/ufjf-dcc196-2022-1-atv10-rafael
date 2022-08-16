@@ -59,7 +59,5 @@ public class Agente extends Individuo {
         return this.existe;
     }
 
-    public Localizacao getLocalizacaoAtual(){
-        return this.getLocaisVisitados().get(this.getLocaisVisitados().size()-1);
-    }
+
 }
