@@ -1,5 +1,5 @@
 package br.ufjf.dcc196.rafael.agente008;
-
+//Classe para instanciação do db
 import android.content.Context;
 
 import androidx.room.Database;

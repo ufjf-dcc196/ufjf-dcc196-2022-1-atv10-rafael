@@ -1,5 +1,5 @@
 package br.ufjf.dcc196.rafael.agente008.entities;
-
+//Classe que representa o caso
 public class Caso {
     private Integer dia;
     private Integer hora;
@@ -26,6 +26,7 @@ public class Caso {
         this.criminoso=new Criminoso();
     }
 
+    //--Getters/Setters
     public Integer getDia() {
         return this.dia;
     }
@@ -66,6 +67,7 @@ public class Caso {
         this.criminoso = criminoso;
     }
 
+    //Traduz o status em strings para serem exibidas na activity
     public static String traduzirStatus(Integer status){
         switch (status){
             case 1:

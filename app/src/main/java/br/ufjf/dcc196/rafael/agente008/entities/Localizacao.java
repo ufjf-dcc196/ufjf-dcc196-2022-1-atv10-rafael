@@ -1,5 +1,5 @@
 package br.ufjf.dcc196.rafael.agente008.entities;
-
+//Classe da entidade Localização
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -34,6 +34,7 @@ public class Localizacao {
         this.populacao=0;
     }
 
+    //Getters/Setters
     public String getRegiao() {
         return this.regiao;
     }
@@ -74,6 +75,7 @@ public class Localizacao {
 
     public void setId(Integer id) {this.id = id;}
 
+    //Retorna uma cópia de this
     public Localizacao clone(){
         Localizacao clone = new Localizacao();
         clone.regiao=this.regiao;
@@ -85,9 +87,8 @@ public class Localizacao {
     }
 
 
-    //Randomiza um dos locais da cidade (Usado pra geração do criminoso)
+    //Randomiza um dos locais da cidade (Usado pra geração da rota do criminoso) //TODO Corrigir Rodoviaria para Rodoviária, assim como no db
     public static Localizacao randLocalDaCidade(Random rand, Localizacao localAtual , List<Localizacao> rota, List<Localizacao> localizacoes){
-//TODO ta dando pau aqui
         List<Localizacao> locaisCidadeAtual=new ArrayList<Localizacao>();
 
         for(Localizacao l: localizacoes){
@@ -99,6 +100,7 @@ public class Localizacao {
         return locaisCidadeAtual.get(rand.nextInt(locaisCidadeAtual.size()));
     }
 
+    //Definição aleatória do destido de um criminoso //TODO Corrigir Rodoviaria para Rodoviária, assim como no db
     public static Localizacao randDestino(Random rand, List<Localizacao> rota, List<Localizacao> localizacoes){
         Localizacao localAtual=rota.get(rota.size()-1);
         if(!localAtual.chegouAgora(rota) && (localAtual.getLocal().equals("Rodoviaria") || localAtual.getLocal().equals("Aeroporto"))){
@@ -108,6 +110,7 @@ public class Localizacao {
 
     }
 
+    //Verifica se o indivíduo chegou agora na referida cidade (Usado para gerar a rota de um criminoso) /TODO considerar tirar isso
     private Boolean chegouAgora(List<Localizacao> rota){
 
         if(rota.size()>1 && rota.get(rota.size()-1).local.equals(rota.get(rota.size()-2).local)) {
@@ -116,7 +119,7 @@ public class Localizacao {
         return false;
     }
 
-    //Randomiza um local de Destino
+    //Randomiza um local de Destino (Utilizado para gerar a rota de um criminoso)
     public static Localizacao randViagem(Random rand, Localizacao localAtual, List<Localizacao> localizacoes){
 
         List<Localizacao> destinos;
@@ -142,6 +145,7 @@ public class Localizacao {
         }
         return aeroportos;
     }
+
     //Retorna todas as rodoviarias
     private static List<Localizacao> getRodoviarias(List<Localizacao> localizacoes, Localizacao origem){
         List<Localizacao> rodoviarias=new ArrayList<Localizacao>();
@@ -152,6 +156,7 @@ public class Localizacao {
         }
         return rodoviarias;
     }
+
     //Verifica se este local ja foi visitado
     public static Boolean jaVisitado(Localizacao local, List<Localizacao> rota){
 
@@ -163,6 +168,7 @@ public class Localizacao {
         return false;
     }
 
+    //Precifica o custo da viagem entre dois locais //TODO modificar o custo se de avião/ônibus
     public static Double precificarDeslocamento(Localizacao a, Localizacao b){
 
         if(!a.regiao.equals(b.regiao)){
@@ -176,6 +182,7 @@ public class Localizacao {
         }
     }
 
+    //Retorna o tempo de viagem entre dois locais //TODO modificar o tempo se de avião/ônibus
     public static Integer quantificarTempo(Localizacao a, Localizacao b){
 
         if(!a.regiao.equals(b.regiao)){
@@ -187,17 +194,6 @@ public class Localizacao {
         }else{
             return Caso.HORAS_VISITA;
         }
-    }
-
-    public Localizacao copy(){
-        Localizacao localizacao=new Localizacao();
-        localizacao.id=this.id;
-        localizacao.regiao=this.regiao;
-        localizacao.estado=this.estado;
-        localizacao.cidade=this.cidade;
-        localizacao.populacao=this.populacao;
-        localizacao.local=this.local;
-        return localizacao;
     }
 
 

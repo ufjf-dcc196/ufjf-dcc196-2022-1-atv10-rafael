@@ -1,5 +1,5 @@
 package br.ufjf.dcc196.rafael.agente008.entities;
-
+//Superclasse que representa um indivíduo
 import java.util.ArrayList;
 import java.util.List;
 

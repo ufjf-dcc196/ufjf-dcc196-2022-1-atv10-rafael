@@ -1,5 +1,5 @@
 package br.ufjf.dcc196.rafael.agente008;
-
+//Classe da activity novo jogo
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,8 +32,8 @@ public class NovoJogoActivity extends AppCompatActivity {
     private Button btnCadastrar, btnRetornar;
     private RecyclerView rvCidades;
     private CidadeAdapter cidadeAdapter;
-    private Localizacao baseSelecionada;
     private AppDatabase db;
+    private Localizacao baseSelecionada;
     private List<Localizacao> localizacoes;
     private Agente agente;
     private JogoRepository repo;
@@ -54,6 +54,7 @@ public class NovoJogoActivity extends AppCompatActivity {
 
     }
 
+    //Instanciação e população do RecyclerView
     private void buildRv(){
         LinearLayoutManager layoutManager=new LinearLayoutManager(this);
         this.rvCidades.setLayoutManager(layoutManager);
@@ -73,9 +74,9 @@ public class NovoJogoActivity extends AppCompatActivity {
             public void run() {
 
                 if(etCidade.getText().toString().equals("")){
-                    localizacoes=db.localizacaoDAO().findDistinctCidadesByEstado(spUf.getSelectedItem().toString(),"Delegacia");
+                    localizacoes=db.localizacaoDAO().findLocaisByEstado(spUf.getSelectedItem().toString(),"Delegacia");
                 }else{
-                    localizacoes=db.localizacaoDAO().findDistinctCidadesByEstadoAndCidade(spUf.getSelectedItem().toString(),etCidade.getText().toString(),"Delegacia");
+                    localizacoes=db.localizacaoDAO().findLocaisByCidadesAndEstado(spUf.getSelectedItem().toString(),etCidade.getText().toString(),"Delegacia");
                 }
                 cidadeAdapter =new CidadeAdapter(localizacoes,listener);
 
@@ -91,6 +92,7 @@ public class NovoJogoActivity extends AppCompatActivity {
 
     }
 
+    //Atribuição de views para variaveis
     private void buildViews(){
         //TextViews
         this.tvBase=findViewById(R.id.tvBase);
@@ -108,6 +110,7 @@ public class NovoJogoActivity extends AppCompatActivity {
         this.rvCidades=findViewById(R.id.rvCidadesBase);
     }
 
+    //Configuração dos listeners
     private void buildListeners(){
         //Spinner listener
         this.spUf.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -140,7 +143,6 @@ public class NovoJogoActivity extends AppCompatActivity {
             }
         });
 
-        //Nome EditText Listener
         this.etNome.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -160,6 +162,7 @@ public class NovoJogoActivity extends AppCompatActivity {
 
     }
 
+    //Habilita (se possível) o botão Cadastrar
     public void habilitarBotaoCadastrar(){
         if(this.baseSelecionada!=null && !this.etNome.getText().toString().equals("")){
             this.btnCadastrar.setEnabled(true);
@@ -169,6 +172,7 @@ public class NovoJogoActivity extends AppCompatActivity {
     }
 
 
+    //--Tratamento do click nos botões
     public void cadastrarClick(View v){
         this.agente=new Agente();
         this.agente.setNome(this.etNome.getText().toString());
@@ -201,6 +205,7 @@ public class NovoJogoActivity extends AppCompatActivity {
 
     }
 
+    //Gera mensagem para o AlertDialog
     private String gerarNovoJogoMensagem(){
         String mensagem= "Bem vindo a nossa equipe Agente "+this.agente.getNome()+"! Contamos com seu apoio!";
         return mensagem;

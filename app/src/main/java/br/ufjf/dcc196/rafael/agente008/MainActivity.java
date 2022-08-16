@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Random;
 
 import br.ufjf.dcc196.rafael.agente008.Adapters.LocalizacaoAdapter;
-import br.ufjf.dcc196.rafael.agente008.DAO.DatabaseBuilder;
 import br.ufjf.dcc196.rafael.agente008.entities.*;
 
 @SuppressLint({"SetTextI18n", "NonConstantResourceId"})
@@ -34,11 +33,11 @@ public class MainActivity extends AppCompatActivity {
     private JogoRepository repo;
     private AppDatabase db;
     private ActivityResultLauncher<Intent> launcher;
+    private LocalizacaoAdapter localizacaoAdapter;
     private List<Localizacao> localizacoes;
+    private Random rand;
     private Agente agente;
     private Caso caso;
-    private LocalizacaoAdapter localizacaoAdapter;
-    private Random rand;
 
 
     @Override
@@ -53,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         buildLauncher();
         buildViews();
+
         //Carregando as Localizações
         new Thread(new Runnable() {
             @Override
@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //Busca o Agente o Caso no SharesPreferences
     private void loadData(){
         this.agente=this.repo.getAgente();
 
@@ -100,11 +101,13 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //Reseta o caso atual
     private void resetCaso(){
         this.caso=new Caso();
         this.repo.setCaso(this.caso);
     }
 
+    //Constroi e popula o recyclerView
     private void buildRv(){
         LinearLayoutManager layoutManager=new LinearLayoutManager(this);
         this.rvLocaisVisitados.setLayoutManager(layoutManager);
@@ -118,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
         this.rvLocaisVisitados.setAdapter(localizacaoAdapter);
     }
 
+    //Atribuição de views para variaveis
     private void buildViews(){
         //TextViews
         this.tvDia=findViewById(R.id.tvDia);
@@ -139,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
         this.rvLocaisVisitados=findViewById(R.id.rvLocaisVisitados);
     }
 
+    //Tratamento do launcher, para retorno das activities
     private void buildLauncher(){
         this.launcher= registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
@@ -148,10 +153,8 @@ public class MainActivity extends AppCompatActivity {
                     resetCaso();
                     btnNovoCaso.setEnabled(true);
                     loadData();
-                } else if(result.getResultCode()==VisitarActivity.RESULT_VISITAR){
-                    loadData();
-                    verificarJogo();
-                } else if(result.getResultCode()==ViajarActivity.RESULT_VIAJAR){
+                } else if(result.getResultCode()==VisitarActivity.RESULT_VISITAR ||
+                        result.getResultCode()==ViajarActivity.RESULT_VIAJAR){
                     loadData();
                     verificarJogo();
                 }
@@ -161,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //--Ajustam as views e as entidades de acordo com o status do jogo
     private void verificarJogo(){
         if(this.caso.getStatus().equals(Caso.FALIU)){
             tratarFalencia();
@@ -168,7 +172,6 @@ public class MainActivity extends AppCompatActivity {
             tratarConclusao();
         }
     }
-
     private void tratarFalencia(){
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         dialogBuilder.setTitle("Você faliu!");
@@ -197,6 +200,26 @@ public class MainActivity extends AppCompatActivity {
         dialogBuilder.show();
     }
 
+    //--Seta o enables dos botões dependendo do status do jogo
+    private void noAgenteViewsSet(){
+        this.btnNovoCaso.setEnabled(false);
+        noCasoViewsSet();
+    }
+    private void noCasoViewsSet(){
+        this.btnFazerViagem.setEnabled(false);
+        this.btnVisitarLocal.setEnabled(false);
+    }
+    private void hasCasoViewSet(){
+        this.btnNovoCaso.setEnabled(false);
+        this.btnVisitarLocal.setEnabled(true);
+        if(this.agente.getLocalizacaoAtual().getLocal().equals("Aeroporto") || this.agente.getLocalizacaoAtual().getLocal().equals("Rodoviaria")) {
+            this.btnFazerViagem.setEnabled(true);
+        }else{
+            this.btnFazerViagem.setEnabled(false);
+        }
+    }
+
+    //Gera um novo caso
     public void gerarCaso(){
         this.caso=new Caso();
         this.caso.setStatus(Caso.EM_ANDAMENTO);
@@ -214,27 +237,7 @@ public class MainActivity extends AppCompatActivity {
         hasCasoViewSet();
     }
 
-    private void noAgenteViewsSet(){
-        this.btnNovoCaso.setEnabled(false);
-        noCasoViewsSet();
-    }
-
-    private void noCasoViewsSet(){
-        this.btnFazerViagem.setEnabled(false);
-        this.btnVisitarLocal.setEnabled(false);
-    }
-
-    private void hasCasoViewSet(){
-        this.btnNovoCaso.setEnabled(false);
-        this.btnVisitarLocal.setEnabled(true);
-        if(this.agente.getLocalizacaoAtual().getLocal().equals("Aeroporto") || this.agente.getLocalizacaoAtual().getLocal().equals("Rodoviaria")) {
-            this.btnFazerViagem.setEnabled(true);
-        }else{
-            this.btnFazerViagem.setEnabled(false);
-        }
-    }
-
-//--Funções de tratamento para click nos botões
+    //--Funções de tratamento para click nos botões
     public void clickNovoJogo(View v){
         if(this.agente.existe()) {
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
@@ -261,7 +264,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
     public void clickNovoCaso(View v){
         gerarCaso();
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
@@ -285,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
         this.launcher.launch(intent);
     }
 
-    //----------Geraçoes de mensagem para o AlertDialog
+    //--Geraçoes de mensagem para o AlertDialog
     private String gerarAlertaNovoCasoMensagem(){
 
         return "Ao iniciar um novo jogo, você deverá criar um novo Agente e todo o progresso será perdido. Continuar?";

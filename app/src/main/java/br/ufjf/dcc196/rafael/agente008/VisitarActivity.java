@@ -1,17 +1,15 @@
 package br.ufjf.dcc196.rafael.agente008;
-
+//Classe da activity visitar
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.List;
@@ -27,12 +25,12 @@ public class VisitarActivity extends AppCompatActivity {
     private Button btnVisitarVisita, btnRetornarVisita;
     private RecyclerView rvLocaisVisita;
     private JogoRepository repo;
+    private AppDatabase db;
     private LocalizacaoAdapter localizacaoAdapter;
-    private Agente agente;
-    private Caso caso;
     private List<Localizacao> localizacoes;
     private Localizacao localEscolhido;
-    private AppDatabase db;
+    private Agente agente;
+    private Caso caso;
     public static final int RESULT_VISITAR = 1;
 
     @Override
@@ -44,10 +42,11 @@ public class VisitarActivity extends AppCompatActivity {
         this.repo=new JogoRepository(getApplicationContext());
 
         buildViews();
-        setViews();
+        loadData();
         loadLocalizacoes();
     }
 
+    //Atribuição de views para variaveis
     private void buildViews(){
         //TextViews
         this.tvNomeAgenteVisita=findViewById(R.id.tvNomeAgenteVisita);
@@ -67,27 +66,25 @@ public class VisitarActivity extends AppCompatActivity {
         this.rvLocaisVisita=findViewById(R.id.rvLocaisVisita);
     }
 
+    //Busca no db as localizações da cidade referida
     private void loadLocalizacoes(){
         Agente agente = this.repo.getAgente();
 
-    new Thread(new Runnable() {
-        @Override
-        public void run() {
-            String cidade =agente.getLocaisVisitados().get(agente.getLocaisVisitados().size()-1).getCidade();
-            localizacoes=db.localizacaoDAO().findLocaisbyCidades(cidade);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String cidade =agente.getLocalizacaoAtual().getCidade();
+                localizacoes=db.localizacaoDAO().findLocaisbyCidades(cidade);
 
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    buildRv();
-                }
-            });
-        }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        buildRv();
+                    }
+                });
+            }
 
-    }).start();
-
-
-
+        }).start();
 
     }
 
@@ -110,7 +107,8 @@ public class VisitarActivity extends AppCompatActivity {
         this.rvLocaisVisita.setAdapter(localizacaoAdapter);
     }
 
-    private void setViews(){
+    //Carrega os dados do SharedPreferences
+    private void loadData(){
         Agente agente=this.repo.getAgente();
         Caso caso=this.repo.getCaso();
         this.tvNomeAgenteVisita.setText(agente.getNome());
@@ -120,17 +118,15 @@ public class VisitarActivity extends AppCompatActivity {
         this.tvHoraVisita.setText(caso.getHora().toString());
         this.tvLocalizacaoAtualVisita.setText(agente.getLocaisVisitados().get(agente.getLocaisVisitados().size()-1).toString());
         this.tvNomeAgenteVisita.setText(agente.getNome());
-
     }
 
-
+    //-Tratamento dos clicks nos botoes
     public void retornarClick(View v){
         Intent resultado = new Intent();
         setResult(-1, resultado);
         finish();
 
     }
-
     public void visitarClick(View v){
 
         this.agente=this.repo.getAgente();
@@ -164,6 +160,7 @@ public class VisitarActivity extends AppCompatActivity {
 
     }
 
+    //Geração de mensagem para o click da visita
     private void gerarVisitarMensagem() {
         String mensagem = " Voce atingiu 16 horas de trabalho, as proximas tarefas ocorrerão no dia seguinte";
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);

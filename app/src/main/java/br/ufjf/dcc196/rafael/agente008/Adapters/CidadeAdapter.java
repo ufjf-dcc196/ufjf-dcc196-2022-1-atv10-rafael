@@ -1,4 +1,5 @@
 package br.ufjf.dcc196.rafael.agente008.Adapters;
+//Classe do adapter para Cidades
 
 import android.annotation.SuppressLint;
 import android.content.Context;

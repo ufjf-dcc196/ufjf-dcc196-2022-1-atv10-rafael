@@ -1,5 +1,6 @@
 package br.ufjf.dcc196.rafael.agente008;
 
+//Classe para controlar o Repository do jogo
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -30,10 +31,10 @@ public class JogoRepository {
     public JogoRepository(@NonNull Context context){
         this.contexto=context;
         this.preferences= context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
-        //this.preferences.edit().clear().apply();
-        //System.out.println("Zerado");
+        //this.preferences.edit().clear().apply();// Comando que limpa o repository
     }
 
+    //Leva o caso para o repository
     public void setCaso(@NonNull Caso caso){
 
         try {
@@ -55,6 +56,7 @@ public class JogoRepository {
 
     }
 
+    //Traz o caso do repository
     public Caso getCaso(){
         try {
 
@@ -74,6 +76,7 @@ public class JogoRepository {
         return null;
     }
 
+    //Leva o agente para o repository
     public void setAgente(@NonNull Agente agente){
 
         try {
@@ -108,6 +111,7 @@ public class JogoRepository {
         }
     }
 
+    //Traz o agente do repository
     public Agente getAgente(){
         try {
 
@@ -139,7 +143,8 @@ public class JogoRepository {
         return null;
     }
 
-    public void setCriminoso(@NonNull Criminoso criminoso){
+    //Leva o criminoso para o repository
+    private void setCriminoso(@NonNull Criminoso criminoso){
         try {
             JSONArray jsonArray= new JSONArray();
 
@@ -163,7 +168,8 @@ public class JogoRepository {
         }
     }
 
-    public Criminoso getCriminoso(){
+    //Traz o criminoso para o repository
+    private Criminoso getCriminoso(){
         try {
 
             JSONArray jsonArray= new JSONArray(this.preferences.getString(CRIMINOSO_KEY,"[]"));
@@ -184,6 +190,7 @@ public class JogoRepository {
         return null;
     }
 
+    //Traz a lista de localizacoes (Utilizado para rotas Agente/Criminoso)
     @Nullable
     private List<Localizacao> getLocalizacoes(Individuo individuo, @NonNull JSONArray jsonArray){
 
@@ -214,6 +221,7 @@ public class JogoRepository {
         return null;
     }
 
+    //Leva a lista de localizacoes para o repository (Utilizado para rotas Agente/Criminoso)
     private void setLocalizacoes(@NonNull Individuo individuo, JSONArray jsonArray){
         try{
             //locais visitados

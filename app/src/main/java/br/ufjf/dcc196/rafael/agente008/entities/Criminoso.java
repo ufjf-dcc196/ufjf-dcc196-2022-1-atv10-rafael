@@ -1,5 +1,5 @@
 package br.ufjf.dcc196.rafael.agente008.entities;
-
+//Classe que representa um criminoso
 import java.util.List;
 import java.util.Random;
 
@@ -14,6 +14,7 @@ public class Criminoso extends Individuo {
         this.crime="";
     }
 
+    //Getters/Setters
     public String getCrime() {
         return this.crime;
     }
@@ -22,6 +23,7 @@ public class Criminoso extends Individuo {
         this.crime = crime;
     }
 
+    //Gerando um criminoso
     public static Criminoso gerar(Random rand, Agente agente, List<Localizacao> localizacoes){
         Criminoso criminoso=new Criminoso();
 

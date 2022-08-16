@@ -1,5 +1,5 @@
 package br.ufjf.dcc196.rafael.agente008.DAO;
-
+//Classe para popular o Banco de dados
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -8,6 +8,7 @@ import br.ufjf.dcc196.rafael.agente008.AppDatabase;
 import br.ufjf.dcc196.rafael.agente008.entities.Localizacao;
 
 public abstract class DatabaseBuilder {
+
 
     private static List<Localizacao> buildLocalizacoes(){
 
@@ -71,6 +72,7 @@ public abstract class DatabaseBuilder {
 
     }
 
+    //Popula o db com localizações
     public static void popularLocalizacoes(AppDatabase db){
 
 
@@ -98,6 +100,7 @@ public abstract class DatabaseBuilder {
 
     }
 
+    //Lista com nomes de cidades do brasil
     private static List<String> getCidades(){
         List<String> localizacoes = new ArrayList<String>();
 
@@ -5675,6 +5678,7 @@ public abstract class DatabaseBuilder {
         return  localizacoes;
     }
 
+    //Lista com nomes de estabelecimentos
     private static List<String> getEstabelecimentos(){
 
         List<String> estabelecimenots = new ArrayList<String>();
@@ -5691,6 +5695,7 @@ public abstract class DatabaseBuilder {
         return estabelecimenots;
     }
 
+    //Lista com nomes
     public static List<String> getNomes(){
         List<String> nomes = new ArrayList<String>();
 
@@ -6994,6 +6999,7 @@ public abstract class DatabaseBuilder {
         return nomes;
     }
 
+    //Lista com crimes
     public static List<String> getCrimes(){
         List<String> crimes = new ArrayList<String>();
         crimes.add("Homicídio");

@@ -1,5 +1,5 @@
 package br.ufjf.dcc196.rafael.agente008;
-
+//Classe da Activity Viajar
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,17 +30,16 @@ public class ViajarActivity extends AppCompatActivity {
     private EditText etCidade;
     private Spinner spUfViagem;
     private Button btnViajarViagem, btnRetornarViagem;
-    private List<Localizacao> cidades;
-    private Localizacao cidadeSelecionada;
     private CidadeAdapter cidadeAdapter;
     private RecyclerView rvCidades;
+    private AppDatabase db;
+    private JogoRepository repo;
+    private List<Localizacao> cidades;
+    private Localizacao cidadeSelecionada;
     private Integer horasViagem;
     private Double precoViagem;
     private Agente agente;
     private Caso caso;
-    private AppDatabase db;
-    private JogoRepository repo;
-
     public static final int RESULT_VIAJAR = 2;
 
     @Override
@@ -52,11 +51,11 @@ public class ViajarActivity extends AppCompatActivity {
         this.repo=new JogoRepository(getApplicationContext());
 
         buildViews();
-        setViews();
-        buildRv();
+        loadData();
         buildListeners();
     }
 
+    //Atribuição de views para variaveis
     private void buildViews(){
         //TextViews
         this.tvNomeAgenteViagem=findViewById(R.id.tvNomeAgenteViagem);
@@ -82,7 +81,8 @@ public class ViajarActivity extends AppCompatActivity {
         this.rvCidades=findViewById(R.id.rvCidadesViagem);
     }
 
-    private void setViews(){
+    //Carrega os dados do SharedPreferences
+    private void loadData(){
         this.agente=this.repo.getAgente();
         this.caso=this.repo.getCaso();
         this.tvNomeAgenteViagem.setText(agente.getNome());
@@ -92,9 +92,10 @@ public class ViajarActivity extends AppCompatActivity {
         this.tvHoraViagem.setText(caso.getHora().toString());
         this.tvLocalizacaoAtualViagem.setText(agente.getLocaisVisitados().get(agente.getLocaisVisitados().size()-1).toString());
         this.tvNomeAgenteViagem.setText(agente.getNome());
-
+        buildRv();
     }
 
+    //Constroi e popula o RecyclerView
     private void buildRv(){
         LinearLayoutManager layoutManager=new LinearLayoutManager(this);
         this.rvCidades.setLayoutManager(layoutManager);
@@ -121,13 +122,13 @@ public class ViajarActivity extends AppCompatActivity {
                     if(agente.getLocalizacaoAtual().getLocal().equals("Aeroporto")) {
                         cidades = db.localizacaoDAO().findCidadesComAeroportoByEstado(spUfViagem.getSelectedItem().toString());
                     }else {
-                        cidades = db.localizacaoDAO().findDistinctCidadesByEstado(spUfViagem.getSelectedItem().toString(), "Delegacia");
+                        cidades = db.localizacaoDAO().findLocaisByEstado(spUfViagem.getSelectedItem().toString(), "Delegacia");
                     }
                 }else {
                     if (agente.getLocalizacaoAtual().getLocal().equals("Aeroporto")) {
                         cidades = db.localizacaoDAO().findCidadesComAeroportoByEstadoeCidade(spUfViagem.getSelectedItem().toString(),etCidade.getText().toString() );
                     } else {
-                        cidades = db.localizacaoDAO().findDistinctCidadesByEstadoAndCidade(spUfViagem.getSelectedItem().toString(), etCidade.getText().toString(), "Delegacia");
+                        cidades = db.localizacaoDAO().findLocaisByCidadesAndEstado(spUfViagem.getSelectedItem().toString(), etCidade.getText().toString(), "Delegacia");
                     }
                 }
 
@@ -144,6 +145,8 @@ public class ViajarActivity extends AppCompatActivity {
 
 
     }
+
+    //Listeners necessarios para a activity
     private void buildListeners(){
         //Spinner listener
         this.spUfViagem.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -177,6 +180,8 @@ public class ViajarActivity extends AppCompatActivity {
         });
 
     }
+
+    //Habilita (se possivel) o botão viajar)
     public void habilitarBotaoViajar(){
         if(this.cidadeSelecionada!=null){
             this.btnViajarViagem.setEnabled(true);
@@ -185,13 +190,13 @@ public class ViajarActivity extends AppCompatActivity {
         }
     }
 
+    //-Tratamento dos clicks nos botoes
     public void retornarClick(View v){
         Intent resultado = new Intent();
         setResult(-1, resultado);
         finish();
 
     }
-
     public void viajarClick(View v){
 
         this.agente.setDinheiro(this.agente.getDinheiro()-this.precoViagem);
@@ -233,6 +238,7 @@ public class ViajarActivity extends AppCompatActivity {
 
     }
 
+    //Geração de mensagem para o click da viagem
     private String gerarViajarMensagem(Boolean mudouDia){
         String mensagem= "Bem vindo a "+this.agente.getLocalizacaoAtual()+"!";
 

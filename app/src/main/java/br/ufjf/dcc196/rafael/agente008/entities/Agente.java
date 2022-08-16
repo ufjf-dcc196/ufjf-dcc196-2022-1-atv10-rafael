@@ -1,9 +1,9 @@
 package br.ufjf.dcc196.rafael.agente008.entities;
-
+//Classe que representa um agente
 public class Agente extends Individuo {
 
     private Double dinheiro;
-    private Integer casosConcluidos;
+    private Integer casosConcluidos;//TODO implementar os casos concluidos
     private Localizacao base;
     private Boolean existe;
 

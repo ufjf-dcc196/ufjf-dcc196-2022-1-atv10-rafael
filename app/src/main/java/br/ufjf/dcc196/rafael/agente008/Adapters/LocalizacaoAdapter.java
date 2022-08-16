@@ -1,5 +1,5 @@
 package br.ufjf.dcc196.rafael.agente008.Adapters;
-
+//Classe do adapter para Localizacoes
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
