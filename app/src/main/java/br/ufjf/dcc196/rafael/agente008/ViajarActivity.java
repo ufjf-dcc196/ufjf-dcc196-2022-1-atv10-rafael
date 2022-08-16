@@ -1,5 +1,6 @@
 package br.ufjf.dcc196.rafael.agente008;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -191,25 +193,54 @@ public class ViajarActivity extends AppCompatActivity {
     }
 
     public void viajarClick(View v){
-        Intent resultado = new Intent();
+
         this.agente.setDinheiro(this.agente.getDinheiro()-this.precoViagem);
         this.caso.setHora(this.caso.getHora()+this.horasViagem);
         this.agente.getLocaisVisitados().add(this.cidadeSelecionada);
 
+        Boolean mudouDia=false;
         if(this.agente.getDinheiro()<0.0){
             this.caso.setStatus(Caso.FALIU);
         }else if(this.agente.getLocalizacaoAtual().equals(this.caso.getCriminoso().getLocalizacaoAtual())){
             this.caso.setStatus(Caso.CONCLUIDO);
-        }else if(this.caso.getHora()>=Caso.HORAS_TRABALHADAS_POR_DIA){
+        }else if(this.caso.getHora()>=Caso.MAX_HORAS_TRABALHADAS_POR_DIA){
             this.caso.incrDia();
             this.caso.setHora(0);
+            mudouDia=true;
         }
+
+
+
 
         this.repo.setAgente(this.agente);
         this.repo.setCaso(this.caso);
 
+        Intent resultado = new Intent();
         setResult(RESULT_VIAJAR, resultado);
-        finish();
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle("Bem Vindo!!");
+        dialogBuilder.setMessage(gerarViajarMensagem(mudouDia));
+        dialogBuilder.setPositiveButton("Ok!", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        dialogBuilder.create();
+        dialogBuilder.show();
+
+
+    }
+
+    private String gerarViajarMensagem(Boolean mudouDia){
+        String mensagem= "Bem vindo a "+this.agente.getLocalizacaoAtual()+"!";
+
+        if(mudouDia){
+            mensagem+=" Voce atingiu 16 horas de trabalho, as proximas tarefas ocorrerão no dia seguinte";
+        }
+
+        return mensagem;
 
     }
 }

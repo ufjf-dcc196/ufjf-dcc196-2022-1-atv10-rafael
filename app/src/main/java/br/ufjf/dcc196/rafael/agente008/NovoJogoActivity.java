@@ -1,9 +1,11 @@
 package br.ufjf.dcc196.rafael.agente008;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -177,7 +179,18 @@ public class NovoJogoActivity extends AppCompatActivity {
 
         Intent resultado = new Intent();
         setResult(RESULT_NOVO_JOGO, resultado);
-        finish();
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle("Bem Vindo!!");
+        dialogBuilder.setMessage(gerarNovoJogoMensagem());
+        dialogBuilder.setPositiveButton("Ok!", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        dialogBuilder.create();
+        dialogBuilder.show();
 
     }
 
@@ -186,5 +199,10 @@ public class NovoJogoActivity extends AppCompatActivity {
         setResult(-1, resultado);
         finish();
 
+    }
+
+    private String gerarNovoJogoMensagem(){
+        String mensagem= "Bem vindo a nossa equipe Agente "+this.agente.getNome()+"! Contamos com seu apoio!";
+        return mensagem;
     }
 }

@@ -51,9 +51,6 @@ public class MainActivity extends AppCompatActivity {
         this.repo=new JogoRepository(getApplicationContext());
 
 
-        //DatabaseBuilder.popularLocalizacoes(this.db);
-        this.repo.setAgente(new Agente());
-        resetCaso();
         buildLauncher();
         buildViews();
         //Carregando as Localizações
@@ -67,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         loadData();
+                        btnNovoJogo.setEnabled(true);
                     }
                 });
             }
@@ -80,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
         this.tvNomeAgente.setText(this.agente.getNome().toString());
         this.tvDinheiro.setText("R$" + this.agente.getDinheiro().toString() + "0");
-        this.tvLocalizacaoAtual.setText(this.agente.getBase().toString());
+        this.tvLocalizacaoAtual.setText(this.agente.getLocalizacaoAtual().toString());
         this.btnNovoCaso.setEnabled(true);
 
         this.caso=this.repo.getCaso();
@@ -93,19 +91,17 @@ public class MainActivity extends AppCompatActivity {
 
         if(!this.agente.existe()){
             noAgenteViewsSet();
-        }else if(caso.getStatus()==Caso.INEXISTENTE){
+        }else if(!caso.getStatus().equals(Caso.EM_ANDAMENTO)){
             noCasoViewsSet();
         }else{
             hasCasoViewSet();
-            buildRv();
         }
+        buildRv();
 
     }
 
     private void resetCaso(){
-        //this.agente=new Agente();
         this.caso=new Caso();
-        //this.repo.setAgente(this.agente);
         this.repo.setCaso(this.caso);
     }
 
@@ -153,8 +149,10 @@ public class MainActivity extends AppCompatActivity {
                     btnNovoCaso.setEnabled(true);
                     loadData();
                 } else if(result.getResultCode()==VisitarActivity.RESULT_VISITAR){
+                    loadData();
                     verificarJogo();
                 } else if(result.getResultCode()==ViajarActivity.RESULT_VIAJAR){
+                    loadData();
                     verificarJogo();
                 }
 
@@ -164,14 +162,39 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void verificarJogo(){
-        loadData();
         if(this.caso.getStatus().equals(Caso.FALIU)){
-            System.out.println("Voce faliu!");
+            tratarFalencia();
         }else if(this.caso.getStatus().equals(Caso.CONCLUIDO)){
-            System.out.println("Parabéns! Voce conseguiu!");
-        }else if(this.caso.getHora().equals(0)){
-            System.out.println("Ultrapassadas as 16 horas de trabalho diario, novo dia");
+            tratarConclusao();
         }
+    }
+
+    private void tratarFalencia(){
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle("Você faliu!");
+        dialogBuilder.setMessage(gerarFalenciaMensagem());
+        dialogBuilder.setPositiveButton("Ok!", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(MainActivity.this, NovoJogoActivity.class);
+                noAgenteViewsSet();
+            }
+        });
+        dialogBuilder.create();
+        dialogBuilder.show();
+    }
+    private void tratarConclusao(){
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle("Você conseguiu!");
+        dialogBuilder.setMessage(gerarConclusaoMensagem());
+        dialogBuilder.setPositiveButton("Ok!", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                noCasoViewsSet();
+            }
+        });
+        dialogBuilder.create();
+        dialogBuilder.show();
     }
 
     public void gerarCaso(){
@@ -187,7 +210,6 @@ public class MainActivity extends AppCompatActivity {
         this.agente.getLocaisVisitados().add(this.agente.getBase());
 
         this.repo.setAgente(agente);
-        System.out.println("O bandido esta em "+this.caso.getCriminoso().getLocalizacaoAtual().toString());
         this.btnNovoCaso.setEnabled(false);
         hasCasoViewSet();
     }
@@ -207,55 +229,89 @@ public class MainActivity extends AppCompatActivity {
         this.btnVisitarLocal.setEnabled(true);
         if(this.agente.getLocalizacaoAtual().getLocal().equals("Aeroporto") || this.agente.getLocalizacaoAtual().getLocal().equals("Rodoviaria")) {
             this.btnFazerViagem.setEnabled(true);
+        }else{
+            this.btnFazerViagem.setEnabled(false);
         }
     }
 
 //--Funções de tratamento para click nos botões
+    public void clickNovoJogo(View v){
+        if(this.agente.existe()) {
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+            dialogBuilder.setTitle("Novo jogo!");
+            dialogBuilder.setMessage(gerarAlertaNovoCasoMensagem());
+            dialogBuilder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(MainActivity.this, NovoJogoActivity.class);
+                    launcher.launch(intent);
+                }
+            });
+            dialogBuilder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
 
-    public void clickBotoes(View v){
-        try {
-            Intent intent=null;
-
-            switch (v.getId()){
-                case R.id.btnVisitarLocal:
-                    intent = new Intent(MainActivity.this,VisitarActivity.class);
-                    break;
-                case R.id.btnFazerViagem:
-                    intent = new Intent(MainActivity.this,ViajarActivity.class);
-                    break;
-                case R.id.btnNovoCaso:
-                    gerarCaso();
-                    break;
-            }
-
-            loadData();
-            this.launcher.launch(intent);
-        }catch (Exception e){
-            e.printStackTrace();
+                }
+            });
+            dialogBuilder.create();
+            dialogBuilder.show();
+        }else{
+            Intent intent = new Intent(MainActivity.this, NovoJogoActivity.class);
+            launcher.launch(intent);
         }
+
     }
 
-    public void clickNovoJogo(View v){
+    public void clickNovoCaso(View v){
+        gerarCaso();
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        dialogBuilder.setTitle("Novo jogo!");
-        dialogBuilder.setMessage("Ao iniciar um novo jogo, você deverá criar um novo Agente e todo o progresso será perdido. Continuar?");
-        dialogBuilder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+        dialogBuilder.setTitle("Novo caso!");
+        dialogBuilder.setMessage(gerarNovoCasoMensagem());
+        dialogBuilder.setPositiveButton("Ok!", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(MainActivity.this,NovoJogoActivity.class);
-                launcher.launch(intent);
-            }
-        });
-        dialogBuilder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
+                loadData();
             }
         });
         dialogBuilder.create();
         dialogBuilder.show();
-
+    }
+    public void clickVisitar(View v){
+        Intent intent=new Intent(MainActivity.this,VisitarActivity.class);
+        this.launcher.launch(intent);
+    }
+    public void clickViajar(View v){
+        Intent intent=new Intent(MainActivity.this,ViajarActivity.class);
+        this.launcher.launch(intent);
     }
 
+    //----------Geraçoes de mensagem para o AlertDialog
+    private String gerarAlertaNovoCasoMensagem(){
 
+        return "Ao iniciar um novo jogo, você deverá criar um novo Agente e todo o progresso será perdido. Continuar?";
+    }
+    private String gerarNovoCasoMensagem(){
+        String mensagem="Você foi escalado(a) para trabalhar em um novo caso. Neste, ";
+        Criminoso criminoso=this.caso.getCriminoso();
+        mensagem+= criminoso.getNome() + " foi acusado(a) de " +
+                criminoso.getCrime()+
+                ", e precisamos pega-lo(a)! "+
+                criminoso.getNome()+" foi visto(a) nos arredores de " +
+                criminoso.getLocaisVisitados().get(0).getCidade()+
+                ". Você tera uma jornada limitada a 16 horas por dia! "+
+                ". Contamos com a sua competência, oferecendo um aporte de R$1.000,00 para deslocamentos. Bom trabalho!";
+
+        return mensagem;
+    }
+    private String gerarFalenciaMensagem(){
+
+        return "Você gastou todo o dinheiro disponível, foi destituido do caso e demitido.";
+    }
+    private String gerarConclusaoMensagem(){
+        String mensagem="Parabens Agente "+this.agente.getNome()+
+                "! "+ this.caso.getCriminoso().getCrime() +
+                "foi encontrado por você em " + this.agente.getLocalizacaoAtual().toString() +
+                ". Como bonificação, você ficara com o restante do dinheiro do aporte da investigação.";
+        return mensagem;
+    }
 }

@@ -46,7 +46,7 @@ public interface LocalizacaoDAO {
     @Query("SELECT * FROM localizacao WHERE estado=:estado AND cidades LIKE :cidades ||'%' AND local LIKE :local ORDER BY cidades")
     List<Localizacao> findDistinctCidadesByEstadoAndCidade(String estado, String cidades,String local);
 
-    @Query("SELECT * FROM localizacao WHERE cidades=:cidades AND local NOT LIKE \"Delegacia\"")
+    @Query("SELECT * FROM localizacao WHERE cidades=:cidades AND local NOT LIKE \"Delegacia\" order by local")
     List<Localizacao> findLocaisbyCidades(String cidades);
 
     @Query("SELECT * FROM localizacao WHERE populacao>150000 AND estado LIKE :estado AND local LIKE \"Delegacia\"")
