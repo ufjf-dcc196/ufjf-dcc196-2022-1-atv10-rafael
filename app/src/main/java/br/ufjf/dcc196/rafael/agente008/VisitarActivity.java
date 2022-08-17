@@ -75,8 +75,8 @@ public class VisitarActivity extends AppCompatActivity {
             @Override
             public void run() {
                 String cidade =agente.getLocalizacaoAtual().getCidade();
-                localizacoes=db.localizacaoDAO().findLocaisbyCidades(cidade);
-
+                String estado =agente.getLocalizacaoAtual().getEstado();
+                localizacoes=db.localizacaoDAO().findLocaisByCidadeAndEstado(estado,cidade);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -138,6 +138,7 @@ public class VisitarActivity extends AppCompatActivity {
         if(this.agente.getDinheiro()<0.0){
             this.caso.setStatus(Caso.FALIU);
         }else if(this.agente.getLocalizacaoAtual().equals(this.caso.getCriminoso().getLocalizacaoAtual())){
+            this.agente.incrCasosConcluidos();
             this.caso.setStatus(Caso.CONCLUIDO);
         }else if(this.caso.getHora()>=Caso.MAX_HORAS_TRABALHADAS_POR_DIA){
             this.caso.incrDia();
@@ -202,7 +203,7 @@ public class VisitarActivity extends AppCompatActivity {
                     }
 
                     if (this.agente.getLocalizacaoAtual().getLocal().equals("Aeroporto") ||
-                            this.agente.getLocalizacaoAtual().getLocal().equals("Rodoviaria")) {
+                            this.agente.getLocalizacaoAtual().getLocal().equals("Rodoviária")) {
 
                         dica += "a " + proximoLocalCriminoso.getCidade() + "/" + proximoLocalCriminoso.getEstado() + ".";
                     } else {
@@ -220,7 +221,7 @@ public class VisitarActivity extends AppCompatActivity {
                             dica += "a um posto de combustível.";
                         } else if (proximoLocalCriminoso.getLocal().contains("Hospital")) {
                             dica += "a um hospital.";
-                        } else if (proximoLocalCriminoso.getLocal().contains("Rodoviaria")) {
+                        } else if (proximoLocalCriminoso.getLocal().contains("Rodoviária")) {
                             dica += "a rodoviária.";
                         } else if (proximoLocalCriminoso.getLocal().contains("Aeroporto")) {
                             dica += "ao aeroporto.";

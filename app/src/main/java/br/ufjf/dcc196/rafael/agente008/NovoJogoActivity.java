@@ -76,7 +76,7 @@ public class NovoJogoActivity extends AppCompatActivity {
                 if(etCidade.getText().toString().equals("")){
                     localizacoes=db.localizacaoDAO().findLocaisByEstado(spUf.getSelectedItem().toString(),"Delegacia");
                 }else{
-                    localizacoes=db.localizacaoDAO().findLocaisByCidadesAndEstado(spUf.getSelectedItem().toString(),etCidade.getText().toString(),"Delegacia");
+                    localizacoes=db.localizacaoDAO().findLocaisByCidadeAndEstadoAndLocal(spUf.getSelectedItem().toString(),etCidade.getText().toString(),"Delegacia");
                 }
                 cidadeAdapter =new CidadeAdapter(localizacoes,listener);
 

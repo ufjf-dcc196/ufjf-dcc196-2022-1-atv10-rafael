@@ -59,5 +59,9 @@ public class Agente extends Individuo {
         return this.existe;
     }
 
+    public static String toEmptyJson(){
+        return "[{\"nomeAgente\":\"\",\"dinheiro\":0,\"casosConcluidos\":0,\"existe\":false,\"baseCidade\":\"\",\"baseEstado\":\"\",\"baseRegiao\":\"\",\"basePopulacao\":0,\"baseLocal\":\"\",\"baseDica\":\"\"}]";
+    }
+
 
 }

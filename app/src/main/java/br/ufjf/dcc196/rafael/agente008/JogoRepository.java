@@ -27,6 +27,7 @@ public class JogoRepository {
     private final String CASO_KEY = "CA";
     private final String AGENTE_KEY = "A";
     private final String CRIMINOSO_KEY = "CR";
+    private final String POPULATED_KEY = "POP";
 
     public JogoRepository(@NonNull Context context){
         this.contexto=context;
@@ -61,7 +62,7 @@ public class JogoRepository {
         try {
 
             Caso caso=new Caso();
-            JSONObject jsonObj = new JSONObject(this.preferences.getString(CASO_KEY,"{}"));
+            JSONObject jsonObj = new JSONObject(this.preferences.getString(CASO_KEY,Caso.toEmptyJson()));
 
             caso.setDia(jsonObj.getInt("dia"));
             caso.setHora(jsonObj.getInt("hora"));
@@ -116,7 +117,7 @@ public class JogoRepository {
     public Agente getAgente(){
         try {
 
-            JSONArray jsonArray= new JSONArray(this.preferences.getString(AGENTE_KEY,"[]"));
+            JSONArray jsonArray= new JSONArray(this.preferences.getString(AGENTE_KEY,Agente.toEmptyJson()));
 
             Agente agente=new Agente();
             JSONObject jsonObj = jsonArray.getJSONObject(0);
@@ -174,7 +175,7 @@ public class JogoRepository {
     private Criminoso getCriminoso(){
         try {
 
-            JSONArray jsonArray= new JSONArray(this.preferences.getString(CRIMINOSO_KEY,"[]"));
+            JSONArray jsonArray= new JSONArray(this.preferences.getString(CRIMINOSO_KEY,Criminoso.toEmptyJson()));
 
             Criminoso criminoso=new Criminoso();
             JSONObject jsonObj = jsonArray.getJSONObject(0);
@@ -244,5 +245,17 @@ public class JogoRepository {
             e.printStackTrace();
         }
     }
+
+    //Seta no preferences que a db esta populado
+    public void setPopulated(){
+        SharedPreferences.Editor editor = this.preferences.edit();
+        editor.putBoolean(POPULATED_KEY ,true);
+        editor.apply();
+    }
+    //Verifica se a DB esta populado
+    public Boolean isPopulated(){
+        return this.preferences.getBoolean(POPULATED_KEY,false);
+    }
+
 
 }

@@ -120,15 +120,15 @@ public class ViajarActivity extends AppCompatActivity {
 
                 if(etCidade.getText().toString().equals("")){
                     if(agente.getLocalizacaoAtual().getLocal().equals("Aeroporto")) {
-                        cidades = db.localizacaoDAO().findCidadesComAeroportoByEstado(spUfViagem.getSelectedItem().toString());
+                        cidades = db.localizacaoDAO().findCidadeComAeroportoByEstado(spUfViagem.getSelectedItem().toString());
                     }else {
                         cidades = db.localizacaoDAO().findLocaisByEstado(spUfViagem.getSelectedItem().toString(), "Delegacia");
                     }
                 }else {
                     if (agente.getLocalizacaoAtual().getLocal().equals("Aeroporto")) {
-                        cidades = db.localizacaoDAO().findCidadesComAeroportoByEstadoeCidade(spUfViagem.getSelectedItem().toString(),etCidade.getText().toString() );
+                        cidades = db.localizacaoDAO().findCidadesComAeroportoByEstadoAndCidade(spUfViagem.getSelectedItem().toString(),etCidade.getText().toString() );
                     } else {
-                        cidades = db.localizacaoDAO().findLocaisByCidadesAndEstado(spUfViagem.getSelectedItem().toString(), etCidade.getText().toString(), "Delegacia");
+                        cidades = db.localizacaoDAO().findLocaisByCidadeAndEstadoAndLocal(spUfViagem.getSelectedItem().toString(), etCidade.getText().toString(), "Delegacia");
                     }
                 }
 

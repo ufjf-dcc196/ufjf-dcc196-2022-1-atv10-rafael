@@ -19,7 +19,7 @@ public class Localizacao {
     private String regiao;
     @ColumnInfo(name="estado")
     private String estado;
-    @ColumnInfo(name="cidades")
+    @ColumnInfo(name="cidade")
     private String cidade;
     @ColumnInfo(name="local")
     private String local;
@@ -104,7 +104,7 @@ public class Localizacao {
         List<Localizacao> locaisCidadeAtual=new ArrayList<Localizacao>();
 
         for(Localizacao l: localizacoes){
-            if(l.cidade.equals(localAtual.cidade) && (!jaVisitado(l,rota) || l.local.equals("Rodoviaria")|| l.local.equals("Aeroporto")) && !l.local.equals("Delegacia")){
+            if(l.cidade.equals(localAtual.cidade) && (!jaVisitado(l,rota) || l.local.equals("Rodoviária")|| l.local.equals("Aeroporto")) && !l.local.equals("Delegacia")){
                 locaisCidadeAtual.add(l);
             }
         }
@@ -115,22 +115,47 @@ public class Localizacao {
     //Definição aleatória do destido de um criminoso //TODO Corrigir Rodoviaria para Rodoviária, assim como no db
     public static Localizacao randDestino(Random rand, List<Localizacao> rota, List<Localizacao> localizacoes){
         Localizacao localAtual=rota.get(rota.size()-1);
-        if(localAtual.getLocal().equals("Rodoviaria") || localAtual.getLocal().equals("Aeroporto")){
-            return localizacoes.get(rand.nextInt(localizacoes.size()));
+        if(localAtual.getLocal().equals("Rodoviária")){
+            return randLocaisRegiao(rand,localizacoes,localAtual);
+        }else if(localAtual.getLocal().equals("Aeroporto")){
+            return randLocaisDeCidadeComAeroporto(rand,localizacoes,localAtual);
         }
         return randLocalDaCidade(rand,localAtual, rota,localizacoes);
 
     }
 
-    //Retorna todas as rodoviarias
-    private static List<Localizacao> getRodoviarias(List<Localizacao> localizacoes, Localizacao origem){
-        List<Localizacao> rodoviarias=new ArrayList<Localizacao>();
+    //Randomiza uma rodoviaria da mesma regiao que se encontra o criminoso
+    private static Localizacao randLocaisRegiao(Random rand, List<Localizacao> localizacoes, Localizacao origem){
+        List<Localizacao> locaisRegiao = getLocaisRegiao(localizacoes,origem);
+        return locaisRegiao.get(rand.nextInt(locaisRegiao.size()));
+    }
+
+    //Randomiza um aeroporto
+    private static Localizacao randLocaisDeCidadeComAeroporto(Random rand, List<Localizacao> localizacoes, Localizacao origem){
+        List<Localizacao> cidadesComAeroportos = getCidadesComAeroportos(localizacoes,origem);
+        return cidadesComAeroportos.get(rand.nextInt(cidadesComAeroportos.size()));
+    }
+
+    //Retorna todos os aeroportos da mesma regiao
+    private static List<Localizacao> getCidadesComAeroportos(List<Localizacao> localizacoes, Localizacao origem){
+        List<Localizacao> cidadesComAeroportos=new ArrayList<Localizacao>();
         for(Localizacao l: localizacoes){
-            if(l.local.equals("Rodoviaria") && l.regiao.equals(origem.regiao) && !l.cidade.equals(origem.cidade)){
-                rodoviarias.add(l);
+            if(!l.local.equals("Aeroporto") && l.getPopulacao()>150000 && !l.cidade.equals(origem.cidade)){
+                cidadesComAeroportos.add(l);
             }
         }
-        return rodoviarias;
+        return cidadesComAeroportos;
+    }
+
+    //Retorna todas as rodoviarias da mesma regiao
+    private static List<Localizacao> getLocaisRegiao(List<Localizacao> localizacoes, Localizacao origem){
+        List<Localizacao> locaisRegiao=new ArrayList<Localizacao>();
+        for(Localizacao l: localizacoes){
+            if(!l.local.equals("Rodoviária") && l.regiao.equals(origem.regiao) && !l.cidade.equals(origem.cidade)){
+                locaisRegiao.add(l);
+            }
+        }
+        return locaisRegiao;
     }
 
     //Verifica se este local ja foi visitado

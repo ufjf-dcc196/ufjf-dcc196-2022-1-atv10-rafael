@@ -80,5 +80,7 @@ public class Caso {
         }
         return "Inexistente";
     }
-
+    public static String toEmptyJson(){
+        return "{\"dia\":0,\"hora\":0,\"status\":0}";
+    }
 }

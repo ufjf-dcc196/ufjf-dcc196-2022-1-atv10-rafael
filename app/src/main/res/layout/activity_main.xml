@@ -69,42 +69,42 @@
         android:textColor="#4CAF50"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvLabelNomeAgente" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvHora"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:textColor="#000000"
         android:textSize="16sp"
-        app:layout_constraintEnd_toStartOf="@+id/tvDinheiro"
-        app:layout_constraintTop_toBottomOf="@+id/tvLabelNomeAgente" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnNovoJogo" />
 
     <TextView
         android:id="@+id/tvDia"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:textColor="#000000"
         android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@+id/tvLabelHora"
-        app:layout_constraintTop_toBottomOf="@+id/tvLabelNomeAgente" />
+        app:layout_constraintTop_toBottomOf="@+id/btnNovoJogo" />
 
     <TextView
         android:id="@+id/tvLabelDia"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:text="Dia:"
         android:textColor="#000000"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/tvDia"
-        app:layout_constraintTop_toBottomOf="@+id/tvLabelNomeAgente" />
+        app:layout_constraintTop_toBottomOf="@+id/btnNovoJogo" />
 
     <TextView
         android:id="@+id/tvLabelDadosDoCaso"
@@ -119,17 +119,30 @@
         app:layout_constraintTop_toBottomOf="@+id/btnNovoJogo" />
 
     <TextView
+        android:id="@+id/tvLabelCasosConcluidos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Casos Concluidos:"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/btnNovoJogo"
+        app:layout_constraintTop_toBottomOf="@+id/tvLabelNomeAgente" />
+
+    <TextView
         android:id="@+id/tvLabelStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="12dp"
         android:text="Status:"
         android:textColor="#000000"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/tvStatus"
-        app:layout_constraintTop_toBottomOf="@+id/btnNovoJogo" />
+        app:layout_constraintTop_toBottomOf="@+id/tvLabelHora" />
 
     <TextView
         android:id="@+id/tvLabelNomeAgente"
@@ -218,12 +231,12 @@
         android:id="@+id/tvStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:textColor="#000000"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnNovoJogo" />
+        app:layout_constraintTop_toBottomOf="@+id/tvLabelHora" />
 
     <TextView
         android:id="@+id/tvLocalizacaoAtual"
@@ -248,17 +261,29 @@
         app:layout_constraintTop_toBottomOf="@+id/tvLabelDadosDoCaso" />
 
     <TextView
+        android:id="@+id/tvCasosConcluidos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        app:layout_constraintStart_toEndOf="@+id/tvLabelCasosConcluidos"
+        app:layout_constraintTop_toBottomOf="@+id/tvLabelNomeAgente" />
+
+    <TextView
         android:id="@+id/tvLabelHora"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:text="Hora:"
         android:textColor="#000000"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/tvHora"
-        app:layout_constraintTop_toBottomOf="@+id/tvLabelNomeAgente" />
+        app:layout_constraintTop_toBottomOf="@+id/btnNovoJogo" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvLocaisVisitados"

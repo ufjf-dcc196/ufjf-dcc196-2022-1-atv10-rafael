@@ -37,23 +37,23 @@ public interface LocalizacaoDAO {
     Integer countAll();
 
     //Busca locais por estado (Utilizado para popular delegacias...etc)
-    @Query("SELECT * FROM localizacao WHERE estado LIKE :estado AND local LIKE :local ORDER BY cidades")
+    @Query("SELECT * FROM localizacao WHERE estado LIKE :estado AND local LIKE :local ORDER BY cidade")
     List<Localizacao> findLocaisByEstado(String estado, String local);
 
     //Busca locais por estado e cidade (Utilizado para popular delegacias...etc)
-    @Query("SELECT * FROM localizacao WHERE estado=:estado AND cidades LIKE :cidades ||'%' AND local LIKE :local ORDER BY cidades")
-    List<Localizacao> findLocaisByCidadesAndEstado(String estado, String cidades, String local);
+    @Query("SELECT * FROM localizacao WHERE estado=:estado AND cidade LIKE :cidade ||'%' AND local LIKE :local ORDER BY cidade")
+    List<Localizacao> findLocaisByCidadeAndEstadoAndLocal(String estado, String cidade, String local);
 
     //Busca locais por cidade, que não sejam delegacia
-    @Query("SELECT * FROM localizacao WHERE cidades=:cidades AND local NOT LIKE \"Delegacia\" order by local")
-    List<Localizacao> findLocaisbyCidades(String cidades);
+    @Query("SELECT * FROM localizacao WHERE cidade=:cidade AND estado LIKE :estado AND local NOT LIKE \"Delegacia\" order by local")
+    List<Localizacao> findLocaisByCidadeAndEstado(String estado,String cidade);
 
     //Busca cidades com aeroporto
     @Query("SELECT * FROM localizacao WHERE populacao>150000 AND estado LIKE :estado AND local LIKE \"Delegacia\"")
-    List<Localizacao> findCidadesComAeroportoByEstado(String estado);
+    List<Localizacao> findCidadeComAeroportoByEstado(String estado);
 
     //Busca cidades do estado com aeroporto
-    @Query("SELECT * FROM localizacao WHERE populacao>150000 AND estado LIKE :estado AND cidades LIKE :cidade AND local LIKE \"Delegacia\"")
-    List<Localizacao> findCidadesComAeroportoByEstadoeCidade(String estado, String cidade);
+    @Query("SELECT * FROM localizacao WHERE populacao>150000 AND estado LIKE :estado AND cidade LIKE :cidade ||'%' AND local LIKE \"Delegacia\"")
+    List<Localizacao> findCidadesComAeroportoByEstadoAndCidade(String estado, String cidade);
 
 }

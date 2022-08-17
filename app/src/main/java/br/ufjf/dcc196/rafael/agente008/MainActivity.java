@@ -22,12 +22,13 @@ import java.util.List;
 import java.util.Random;
 
 import br.ufjf.dcc196.rafael.agente008.Adapters.LocalizacaoAdapter;
+import br.ufjf.dcc196.rafael.agente008.DAO.DatabaseBuilder;
 import br.ufjf.dcc196.rafael.agente008.entities.*;
 
 @SuppressLint({"SetTextI18n", "NonConstantResourceId"})
 public class MainActivity extends AppCompatActivity {
 
-    private TextView tvNomeAgente, tvDia, tvHora, tvDinheiro, tvNomeCriminoso, tvCrime, tvStatus, tvLocalizacaoAtual;
+    private TextView tvNomeAgente, tvDia, tvHora, tvDinheiro, tvNomeCriminoso, tvCrime, tvStatus, tvLocalizacaoAtual,tvCasosConcluidos;
     private Button btnNovoJogo, btnVisitarLocal, btnFazerViagem, btnNovoCaso;
     private RecyclerView rvLocaisVisitados;
     private JogoRepository repo;
@@ -39,40 +40,52 @@ public class MainActivity extends AppCompatActivity {
     private Agente agente;
     private Caso caso;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        this.repo = new JogoRepository(getApplicationContext());
         this.db=AppDatabase.getInstance(getApplicationContext());
-        this.rand=new Random();
-        this.repo=new JogoRepository(getApplicationContext());
 
-        /*this.repo.setAgente(new Agente());
-        resetCaso();*/
-
-        buildLauncher();
         buildViews();
 
-        //Carregando as Localizações
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+        if(!this.repo.isPopulated()) {
+            this.tvNomeAgente.setText("Populando DB");
+            DatabaseBuilder.popularLocalizacoes(this.db);
+            this.repo.setPopulated();
+            finish();
+        }else {
+            Boolean resetMode=false;
+            this.rand = new Random();
 
-                localizacoes=db.localizacaoDAO().findAll();
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        loadData();
-                        btnNovoJogo.setEnabled(true);
-                    }
-                });
+            if(resetMode) {
+                this.repo.setAgente(new Agente());
+                resetCaso();
             }
 
-        }).start();
+            buildLauncher();
 
+
+            //Carregando as Localizações
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+
+                    localizacoes = db.localizacaoDAO().findAll();
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            loadData();
+                            btnNovoJogo.setEnabled(true);
+                        }
+                    });
+                }
+
+            }).start();
+        }
     }
 
     //Busca o Agente o Caso no SharesPreferences
@@ -88,11 +101,12 @@ public class MainActivity extends AppCompatActivity {
 
         this.caso=this.repo.getCaso();
 
-        this.tvDia.setText(caso.getDia().toString());
-        this.tvHora.setText(caso.getHora().toString());
-        this.tvStatus.setText(Caso.traduzirStatus(caso.getStatus()));
-        this.tvNomeCriminoso.setText(caso.getCriminoso().getNome().toString());
-        this.tvCrime.setText(caso.getCriminoso().getCrime().toString());
+        this.tvDia.setText(this.caso.getDia().toString());
+        this.tvHora.setText(this.caso.getHora().toString());
+        this.tvStatus.setText(Caso.traduzirStatus(this.caso.getStatus()));
+        this.tvNomeCriminoso.setText(this.caso.getCriminoso().getNome().toString());
+        this.tvCrime.setText(this.caso.getCriminoso().getCrime().toString());
+        this.tvCasosConcluidos.setText(this.agente.getCasosConcluidos().toString());
 
         if(!this.agente.existe()){
             noAgenteViewsSet();
@@ -137,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
         this.tvStatus=findViewById(R.id.tvStatus);
         this.tvLocalizacaoAtual=findViewById(R.id.tvLocalizacaoAtual);
         this.tvNomeAgente=findViewById(R.id.tvNomeAgente);
+        this.tvCasosConcluidos=findViewById(R.id.tvCasosConcluidos);
 
         //Buttons
         this.btnNovoJogo=findViewById(R.id.btnNovoJogo);
@@ -223,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
     private void hasCasoViewSet(){
         this.btnNovoCaso.setEnabled(false);
         this.btnVisitarLocal.setEnabled(true);
-        if(this.agente.getLocalizacaoAtual().getLocal().equals("Aeroporto") || this.agente.getLocalizacaoAtual().getLocal().equals("Rodoviaria")) {
+        if(this.agente.getLocalizacaoAtual().getLocal().equals("Aeroporto") || this.agente.getLocalizacaoAtual().getLocal().equals("Rodoviária")) {
             this.btnFazerViagem.setEnabled(true);
         }else{
             this.btnFazerViagem.setEnabled(false);

@@ -32,7 +32,7 @@ public abstract class DatabaseBuilder {
             localizacoes.add(localizacao);
 
             localizacao=localizacao.clone();
-            localizacao.setLocal("Rodoviaria");
+            localizacao.setLocal("Rodoviária");
             localizacoes.add(localizacao);
 
             if(localizacao.getPopulacao()>150000){

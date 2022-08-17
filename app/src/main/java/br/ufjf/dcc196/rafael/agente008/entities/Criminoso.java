@@ -60,12 +60,16 @@ public class Criminoso extends Individuo {
 
             if(custo>dinheiro){
                 continuar=false;
-            }else{
-                dinheiro-=custo;
-                rota.add(localEscolhido);
             }
+
+            dinheiro-=custo;
+            rota.add(localEscolhido);
 
         }
 
+
+    }
+    public static String toEmptyJson(){
+        return "[{\"nomeCriminoso\":\"\",\"crime\":\"\"}]";
     }
 }
