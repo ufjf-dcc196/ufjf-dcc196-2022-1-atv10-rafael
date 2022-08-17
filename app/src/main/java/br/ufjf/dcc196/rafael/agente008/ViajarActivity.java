@@ -199,9 +199,10 @@ public class ViajarActivity extends AppCompatActivity {
     }
     public void viajarClick(View v){
 
-        this.agente.setDinheiro(this.agente.getDinheiro()-this.precoViagem);
+        this.agente.decrDinheiro(this.precoViagem);
         this.caso.setHora(this.caso.getHora()+this.horasViagem);
         this.agente.getLocaisVisitados().add(this.cidadeSelecionada);
+        this.agente.getLocalizacaoAtual().setDica("Isso é uma delegacia!");
 
         Boolean mudouDia=false;
         if(this.agente.getDinheiro()<0.0){
@@ -213,9 +214,6 @@ public class ViajarActivity extends AppCompatActivity {
             this.caso.setHora(0);
             mudouDia=true;
         }
-
-
-
 
         this.repo.setAgente(this.agente);
         this.repo.setCaso(this.caso);
@@ -249,4 +247,5 @@ public class ViajarActivity extends AppCompatActivity {
         return mensagem;
 
     }
+
 }

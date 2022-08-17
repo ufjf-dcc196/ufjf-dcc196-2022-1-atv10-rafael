@@ -27,7 +27,7 @@ public abstract class Individuo {
     public void setLocaisVisitados(List<Localizacao> locaisVisitados) {
         this.locaisVisitados = locaisVisitados;
     }
-    public Localizacao getLocalizacaoAtual(){
-        return this.getLocaisVisitados().get(this.getLocaisVisitados().size()-1);
+    public Localizacao getLocalizacaoAtual() {
+        return this.getLocaisVisitados().get(this.getLocaisVisitados().size() - 1);
     }
 }

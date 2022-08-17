@@ -95,6 +95,7 @@ public class JogoRepository {
             jsonObj.put("baseRegiao", agente.getBase().getRegiao());
             jsonObj.put("basePopulacao", agente.getBase().getPopulacao());
             jsonObj.put("baseLocal", agente.getBase().getLocal());
+            jsonObj.put("baseDica", agente.getBase().getDica());
 
             jsonArray.put(jsonObj);
 
@@ -131,6 +132,7 @@ public class JogoRepository {
             agente.getBase().setRegiao(jsonObj.getString("baseRegiao"));
             agente.getBase().setPopulacao(jsonObj.getInt("basePopulacao"));
             agente.getBase().setLocal(jsonObj.getString("baseLocal"));
+            agente.getBase().setDica(jsonObj.getString("baseDica"));
 
 
             agente.setLocaisVisitados(getLocalizacoes(agente, jsonArray));
@@ -207,6 +209,7 @@ public class JogoRepository {
                 localizacao.setCidade(jsonObj.getString("localCidade"));
                 localizacao.setPopulacao(jsonObj.getInt("localPopulacao"));
                 localizacao.setLocal(jsonObj.getString("localLocal"));
+                localizacao.setDica(jsonObj.getString("dica"));
 
                 localizacoes.add(localizacao);
 
@@ -233,6 +236,7 @@ public class JogoRepository {
                 jsonObj.put("localRegiao", l.getRegiao());
                 jsonObj.put("localPopulacao", l.getPopulacao());
                 jsonObj.put("localLocal", l.getLocal());
+                jsonObj.put("dica", l.getDica());
                 jsonArray.put(jsonObj);
             }
 

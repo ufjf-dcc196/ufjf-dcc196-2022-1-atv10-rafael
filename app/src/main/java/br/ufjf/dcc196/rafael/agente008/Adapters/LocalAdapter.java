@@ -1,6 +1,5 @@
 package br.ufjf.dcc196.rafael.agente008.Adapters;
-//Classe do adapter para Localizacoes
-import android.annotation.SuppressLint;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,35 +14,33 @@ import java.util.List;
 import br.ufjf.dcc196.rafael.agente008.R;
 import br.ufjf.dcc196.rafael.agente008.entities.Localizacao;
 
-@SuppressLint("NotifyDataSetChanged")
-public class LocalizacaoAdapter extends RecyclerView.Adapter<LocalizacaoAdapter.LocalizacaoViewHolder> {
-
+public class LocalAdapter extends RecyclerView.Adapter<LocalAdapter.LocalViewHolder>{
     private List<Localizacao> localizacoes;
-    private OnLocalizacaoClickListener listener;
+    private LocalAdapter.OnLocalClickListener listener;
 
-    public interface OnLocalizacaoClickListener {
-        void onLocalizacaoClick(View source, int position);
+    public interface OnLocalClickListener {
+        void onLocalClick(View source, int position);
     }
 
-    public LocalizacaoAdapter(List<Localizacao> localizacoes, OnLocalizacaoClickListener listener) {
+    public LocalAdapter(List<Localizacao> localizacoes, LocalAdapter.OnLocalClickListener listener) {
         this.localizacoes = localizacoes;
         this.listener = listener;
     }
 
     @NonNull
     @Override
-    public LocalizacaoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public LocalAdapter.LocalViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context contexto = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(contexto);
-        View localizacaoView = inflater.inflate(R.layout.localizacao_layout, parent, false);
-        LocalizacaoViewHolder holder = new LocalizacaoViewHolder(localizacaoView);
+        View localView = inflater.inflate(R.layout.local_layout, parent, false);
+        LocalAdapter.LocalViewHolder holder = new LocalAdapter.LocalViewHolder(localView);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull LocalizacaoViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull LocalAdapter.LocalViewHolder holder, int position) {
         Localizacao localizacao = this.localizacoes.get(position);
-        holder.tvLocalizacao.setText(localizacao.toString());
+        holder.tvLocal.setText(localizacao.getLocal());
     }
 
     @Override
@@ -51,17 +48,17 @@ public class LocalizacaoAdapter extends RecyclerView.Adapter<LocalizacaoAdapter.
         return this.localizacoes.size();
     }
 
-    public class LocalizacaoViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvLocalizacao;
+    public class LocalViewHolder extends RecyclerView.ViewHolder {
+        private TextView tvLocal;
 
-        public LocalizacaoViewHolder(@NonNull View itemView) {
+        public LocalViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.tvLocalizacao = itemView.findViewById(R.id.tvLocal);
+            this.tvLocal = itemView.findViewById(R.id.tvLocal);
             itemView.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
-                    listener.onLocalizacaoClick(v, getAdapterPosition());
+                    listener.onLocalClick(v, getAdapterPosition());
                 }
             });
         }

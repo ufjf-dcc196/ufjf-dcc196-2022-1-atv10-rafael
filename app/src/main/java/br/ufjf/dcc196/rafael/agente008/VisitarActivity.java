@@ -13,8 +13,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Random;
 
-import br.ufjf.dcc196.rafael.agente008.Adapters.LocalizacaoAdapter;
+import br.ufjf.dcc196.rafael.agente008.Adapters.LocalAdapter;
 import br.ufjf.dcc196.rafael.agente008.entities.Agente;
 import br.ufjf.dcc196.rafael.agente008.entities.Caso;
 import br.ufjf.dcc196.rafael.agente008.entities.Localizacao;
@@ -26,7 +27,7 @@ public class VisitarActivity extends AppCompatActivity {
     private RecyclerView rvLocaisVisita;
     private JogoRepository repo;
     private AppDatabase db;
-    private LocalizacaoAdapter localizacaoAdapter;
+    private LocalAdapter localAdapter;
     private List<Localizacao> localizacoes;
     private Localizacao localEscolhido;
     private Agente agente;
@@ -92,25 +93,25 @@ public class VisitarActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager=new LinearLayoutManager(this);
         this.rvLocaisVisita.setLayoutManager(layoutManager);
 
-        LocalizacaoAdapter.OnLocalizacaoClickListener listener= new LocalizacaoAdapter.OnLocalizacaoClickListener() {
+        LocalAdapter.OnLocalClickListener listener= new LocalAdapter.OnLocalClickListener() {
             @Override
-            public void onLocalizacaoClick(View source, int position) {
-                tvLocalSelecionado.setText(localizacaoAdapter.getLocalizacao(position).toString());
+            public void onLocalClick(View source, int position) {
+                tvLocalSelecionado.setText(localAdapter.getLocalizacao(position).getLocal());
                 tvCustoVisita.setText("R$5.00");
                 tvTempoVisita.setText(String.valueOf(Caso.HORAS_VISITA)+"h");
                 btnVisitarVisita.setEnabled(true);
-                localEscolhido=localizacaoAdapter.getLocalizacao(position);
+                localEscolhido=localAdapter.getLocalizacao(position);
 
             }
         };
-        this.localizacaoAdapter=new LocalizacaoAdapter(this.localizacoes,listener);
-        this.rvLocaisVisita.setAdapter(localizacaoAdapter);
+        this.localAdapter=new LocalAdapter(this.localizacoes,listener);
+        this.rvLocaisVisita.setAdapter(localAdapter);
     }
 
     //Carrega os dados do SharedPreferences
     private void loadData(){
-        Agente agente=this.repo.getAgente();
-        Caso caso=this.repo.getCaso();
+        this.agente=this.repo.getAgente();
+        this.caso=this.repo.getCaso();
         this.tvNomeAgenteVisita.setText(agente.getNome());
         this.tvDinheiroVisita.setText("R$"+agente.getDinheiro().toString()+"0");
         this.tvLocalizacaoAtualVisita.setText(agente.getLocaisVisitados().get(agente.getLocaisVisitados().size()-1).toString());
@@ -129,10 +130,7 @@ public class VisitarActivity extends AppCompatActivity {
     }
     public void visitarClick(View v){
 
-        this.agente=this.repo.getAgente();
-        this.caso=this.repo.getCaso();
-
-        this.agente.setDinheiro(this.agente.getDinheiro()-5.0);
+        this.agente.decrDinheiro(5.0);
         this.agente.getLocaisVisitados().add(this.localEscolhido);
         this.caso.setHora(this.caso.getHora()+caso.HORAS_VISITA);
         Boolean mudouDia=false;
@@ -147,6 +145,8 @@ public class VisitarActivity extends AppCompatActivity {
             mudouDia=true;
         }
 
+        gerarDica();
+
         this.repo.setAgente(this.agente);
         this.repo.setCaso(this.caso);
 
@@ -160,7 +160,87 @@ public class VisitarActivity extends AppCompatActivity {
 
     }
 
-    //Geração de mensagem para o click da visita
+    //Geração da dica de onde o criminoso está
+    public void gerarDica() {
+
+        List<Localizacao> locaisCriminoso = this.caso.getCriminoso().getLocaisVisitados();
+        Localizacao proximoLocalCriminoso = null;
+
+        if(!this.agente.getLocalizacaoAtual().equals(this.caso.getCriminoso().getLocalizacaoAtual())) {
+            for (int i = 0; i < locaisCriminoso.size(); i++) {
+                if (locaisCriminoso.get(i).equals(this.agente.getLocalizacaoAtual())) {
+                    proximoLocalCriminoso = locaisCriminoso.get(i + 1);
+                    break;
+                }
+            }
+
+            String dica="";
+            if (proximoLocalCriminoso == null) {
+                dica = "Não temos informação dessa pessoa por aqui";
+                this.agente.getLocalizacaoAtual().setDica(dica);
+            } else {
+
+                if (!Localizacao.jaVisitado(proximoLocalCriminoso,this.agente.getLocaisVisitados())) {
+                    Random rand = new Random();
+
+                    Integer selecao = rand.nextInt(4);
+                    dica = "Eu estive com essa pessoa. ";
+
+                    switch (selecao) {
+                        case 0:
+                            dica += "Ouvi ele dizendo algo sobre ir ";
+                            break;
+                        case 1:
+                            dica += "Ele falou sobre ir ";
+                            break;
+                        case 2:
+                            dica += "No telefone, ouvi ele diszer algo sobre ir ";
+                            break;
+                        case 3:
+                            dica += "Ouvi um comentário dele sobre ir ";
+                            break;
+                    }
+
+                    if (this.agente.getLocalizacaoAtual().getLocal().equals("Aeroporto") ||
+                            this.agente.getLocalizacaoAtual().getLocal().equals("Rodoviaria")) {
+
+                        dica += "a " + proximoLocalCriminoso.getCidade() + "/" + proximoLocalCriminoso.getEstado() + ".";
+                    } else {
+                        if (proximoLocalCriminoso.getLocal().contains("Restaurante")) {
+                            dica += "a um restaurante.";
+                        } else if (proximoLocalCriminoso.getLocal().contains("Farmácia")) {
+                            dica += "a uma farmácia.";
+                        } else if (proximoLocalCriminoso.getLocal().contains("Padaria")) {
+                            dica += "a uma padaria.";
+                        } else if (proximoLocalCriminoso.getLocal().contains("Barzinho")) {
+                            dica += "a um barzinho.";
+                        } else if (proximoLocalCriminoso.getLocal().contains("Residência")) {
+                            dica += "a uma redisência.";
+                        } else if (proximoLocalCriminoso.getLocal().contains("Posto de combustível")) {
+                            dica += "a um posto de combustível.";
+                        } else if (proximoLocalCriminoso.getLocal().contains("Hospital")) {
+                            dica += "a um hospital.";
+                        } else if (proximoLocalCriminoso.getLocal().contains("Rodoviaria")) {
+                            dica += "a rodoviária.";
+                        } else if (proximoLocalCriminoso.getLocal().contains("Aeroporto")) {
+                            dica += "ao aeroporto.";
+                        }
+                    }
+                    this.agente.getLocalizacaoAtual().setDica(dica);
+                }else{
+                    Localizacao localAnteriorAgente;
+                    for(Localizacao l: this.agente.getLocaisVisitados()){
+                        if(l.equals(this.agente.getLocalizacaoAtual())){
+                            this.agente.getLocalizacaoAtual().setDica(l.getDica());
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    //Geração de mensagens para o click da visita
     private void gerarVisitarMensagem() {
         String mensagem = " Voce atingiu 16 horas de trabalho, as proximas tarefas ocorrerão no dia seguinte";
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
@@ -175,4 +255,5 @@ public class VisitarActivity extends AppCompatActivity {
         dialogBuilder.create();
         dialogBuilder.show();
     }
+
 }

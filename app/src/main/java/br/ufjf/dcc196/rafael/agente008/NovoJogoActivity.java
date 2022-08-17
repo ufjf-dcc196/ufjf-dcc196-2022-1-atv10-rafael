@@ -177,6 +177,7 @@ public class NovoJogoActivity extends AppCompatActivity {
         this.agente=new Agente();
         this.agente.setNome(this.etNome.getText().toString());
         this.agente.setBase(baseSelecionada);
+        this.agente.getBase().setDica("Aqui é uma delegacia!");
         this.agente.setLocaisVisitados(new ArrayList<Localizacao>(){{add(agente.getBase());}});
         this.agente.setExiste(true);
         this.repo.setAgente(this.agente);

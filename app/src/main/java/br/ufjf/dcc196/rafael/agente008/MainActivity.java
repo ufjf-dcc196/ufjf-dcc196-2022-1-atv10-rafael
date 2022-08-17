@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         this.rand=new Random();
         this.repo=new JogoRepository(getApplicationContext());
 
+        /*this.repo.setAgente(new Agente());
+        resetCaso();*/
 
         buildLauncher();
         buildViews();
@@ -79,7 +81,9 @@ public class MainActivity extends AppCompatActivity {
 
         this.tvNomeAgente.setText(this.agente.getNome().toString());
         this.tvDinheiro.setText("R$" + this.agente.getDinheiro().toString() + "0");
-        this.tvLocalizacaoAtual.setText(this.agente.getLocalizacaoAtual().toString());
+        if(this.agente.getLocaisVisitados().size()>0) {
+            this.tvLocalizacaoAtual.setText(this.agente.getLocalizacaoAtual().toString());
+        }
         this.btnNovoCaso.setEnabled(true);
 
         this.caso=this.repo.getCaso();
@@ -115,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
         LocalizacaoAdapter.OnLocalizacaoClickListener listener= new LocalizacaoAdapter.OnLocalizacaoClickListener() {
             @Override
             public void onLocalizacaoClick(View source, int position) {
+                gerarDicaMensagem(localizacaoAdapter.getLocalizacao(position));
             }
         };
         this.localizacaoAdapter=new LocalizacaoAdapter(this.repo.getAgente().getLocaisVisitados(),listener);
@@ -153,8 +158,14 @@ public class MainActivity extends AppCompatActivity {
                     resetCaso();
                     btnNovoCaso.setEnabled(true);
                     loadData();
-                } else if(result.getResultCode()==VisitarActivity.RESULT_VISITAR ||
-                        result.getResultCode()==ViajarActivity.RESULT_VIAJAR){
+                } else if(result.getResultCode()==VisitarActivity.RESULT_VISITAR)
+                {
+                    loadData();
+                    if(caso.getStatus().equals(Caso.EM_ANDAMENTO)) {
+                        gerarDicaMensagem(agente.getLocalizacaoAtual());
+                    }
+                    verificarJogo();
+                }else if(result.getResultCode()==ViajarActivity.RESULT_VIAJAR){
                     loadData();
                     verificarJogo();
                 }
@@ -228,7 +239,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Adicionando 1000 reais ao agente para o novo caso
         this.agente=this.repo.getAgente();
-        this.agente.setDinheiro(this.agente.getDinheiro()+1000.0);
+        this.agente.incrDinheiro(1000.0);
         this.agente.setLocaisVisitados(new ArrayList<Localizacao>());
         this.agente.getLocaisVisitados().add(this.agente.getBase());
 
@@ -311,9 +322,24 @@ public class MainActivity extends AppCompatActivity {
     }
     private String gerarConclusaoMensagem(){
         String mensagem="Parabens Agente "+this.agente.getNome()+
-                "! "+ this.caso.getCriminoso().getCrime() +
-                "foi encontrado por você em " + this.agente.getLocalizacaoAtual().toString() +
+                "! "+ this.caso.getCriminoso().getNome() +
+                " foi encontrado por você em " + this.agente.getLocalizacaoAtual().toString() +
                 ". Como bonificação, você ficara com o restante do dinheiro do aporte da investigação.";
         return mensagem;
     }
+
+    //Gerar mensagem de dica
+    private void gerarDicaMensagem(Localizacao localizacao) {
+        String mensagem = localizacao.getDica();
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setTitle("Dica!!");
+        dialogBuilder.setMessage(mensagem);
+        dialogBuilder.setPositiveButton("Ok!", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {}
+        });
+        dialogBuilder.create();
+        dialogBuilder.show();
+    }
+
 }
