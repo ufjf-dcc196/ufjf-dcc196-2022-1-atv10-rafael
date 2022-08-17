@@ -57,8 +57,8 @@ public class MainActivity extends AppCompatActivity {
             this.repo.setPopulated();
             finish();
         }else {
-            Boolean resetMode=false;
             this.rand = new Random();
+            Boolean resetMode=false;
 
             if(resetMode) {
                 this.repo.setAgente(new Agente());
